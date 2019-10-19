@@ -10,7 +10,10 @@ const descriptions = [
 ];
 
 const init = () => {
-  ReactDOM.render(<MainPage descriptions={descriptions} />, document.querySelector(`#root`));
+  ReactDOM.render(
+      <MainPage descriptions={descriptions} onClick={() => {}} />,
+      document.querySelector(`#root`)
+  );
 };
 
 init();
