@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const MainPage = (props) => {
-  const {descriptions} = props;
+  const {descriptions, onClick} = props;
 
   return (
     <div className="page page--gray page--main">
-      <header className="header">
+      <header className="header" onClick={onClick}>
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
@@ -145,7 +145,8 @@ const MainPage = (props) => {
 };
 
 MainPage.propTypes = {
-  descriptions: PropTypes.arrayOf(PropTypes.string).isRequired
+  descriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
 export default MainPage;
