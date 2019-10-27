@@ -1,8 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import MainPage from './main-page.jsx';
+import HotelCardsList from './hotel-cards-list.jsx';
 
-describe(`MainPage component`, () => {
+describe(`HotelCardsList component`, () => {
   it(`is rendered correctly`, () => {
     const offers = [
       {
@@ -17,7 +17,7 @@ describe(`MainPage component`, () => {
 
     const tree = renderer
       .create(
-          <MainPage
+          <HotelCardsList
             offers={offers}
           />
       )
