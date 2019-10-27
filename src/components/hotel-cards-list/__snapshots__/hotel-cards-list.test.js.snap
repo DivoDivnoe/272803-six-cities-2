@@ -10,16 +10,23 @@ exports[`HotelCardsList component is rendered correctly 1`] = `
     onMouseLeave={[Function]}
   >
     <div
+      className="place-card__mark"
+    >
+      <span>
+        Premium
+      </span>
+    </div>
+    <div
       className="cities__image-wrapper place-card__image-wrapper"
     >
       <a
-        href="#"
+        href="/offer/1"
       >
         <img
           alt="Place image"
           className="place-card__image"
           height="200"
-          src="some src\\""
+          src="some/src"
           width="260"
         />
       </a>
@@ -91,14 +98,12 @@ exports[`HotelCardsList component is rendered correctly 1`] = `
         <a
           href="#"
         >
-          some description
+          some title
         </a>
       </h2>
       <p
         className="place-card__type"
-      >
-        Apartment
-      </p>
+      />
     </div>
   </article>
 </div>

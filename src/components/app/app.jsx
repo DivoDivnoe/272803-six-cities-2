@@ -1,43 +1,33 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import HotelCard from '../hotel-card/hotel-card.jsx';
+import MainPage from '../main-page/main-page.jsx';
+import OfferPage from '../offer-page/offer-page.jsx';
 
-class HotelCardsList extends PureComponent {
-  constructor(props) {
-    super(props);
+const getPageScreen = (offers) => {
+  const {pathname} = location;
 
-    this.state = {currentCard: null};
+  if (pathname === `/`) {
+    return <MainPage offers={offers} />;
   }
 
-  render() {
-    const {offers} = this.props;
+  const [path, id] = pathname.slice(1).split(`/`);
 
-    return (
-      <div className="cities__places-list places__list tabs__content">
-        {offers.map((data, index) => (
-          <HotelCard
-            data={data}
-            onMouseEnter={(card) => this.mouseEnterHandler(card)}
-            onMouseLeave={() => this.mouseLeaveHandler()}
-            key={`card-${index}`}
-          />
-        ))}
-      </div>
-    );
+  if (path === `offer`) {
+    const data = offers.find((offer) => offer.id === +id);
+
+    return <OfferPage data={data} />;
   }
 
-  mouseEnterHandler(card) {
-    this.setState({
-      currentCard: card
-    });
-  }
+  return null;
+};
 
-  mouseLeaveHandler() {
-    this.setState({currentCard: null});
-  }
-}
+const App = (props) => {
+  const {offers} = props;
 
-HotelCardsList.propTypes = {
+  return getPageScreen(offers);
+};
+
+App.propTypes = {
   offers: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
@@ -61,4 +51,4 @@ HotelCardsList.propTypes = {
       })).isRequired,
 };
 
-export default HotelCardsList;
+export default App;

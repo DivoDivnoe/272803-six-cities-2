@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import HotelCardsList from './hotel-cards-list.jsx';
+import OfferPage from './offer-page.jsx';
 
-describe(`HotelCardsList component`, () => {
+describe(`OfferPage component`, () => {
   it(`is rendered correctly`, () => {
-    const offers = [
+    const data =
       {
         id: 1,
         type: `apartment`,
@@ -24,16 +24,13 @@ describe(`HotelCardsList component`, () => {
           name: `Angelina`,
           avatarUrl: `some/src`
         }
-      }
-    ];
+      };
 
-    const tree = renderer
-      .create(
-          <HotelCardsList
-            offers={offers}
-          />
-      )
-      .toJSON();
+    const tree = renderer.create(
+        <OfferPage
+          data={data}
+        />
+    );
 
     expect(tree).toMatchSnapshot();
   });
