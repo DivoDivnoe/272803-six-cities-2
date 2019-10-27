@@ -112,13 +112,19 @@ const MainPage = (props) => {
 
 MainPage.propTypes = {
   offers: PropTypes.arrayOf(
-      PropTypes.exact({
-        type: PropTypes.oneOf([`apartment`, `private room`]),
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
         price: PropTypes.number.isRequired,
         rating: PropTypes.number.isRequired,
         picture: PropTypes.string.isRequired,
+        images: PropTypes.arrayOf(PropTypes.string).isRequired,
+        title: PropTypes.string.isRequired,
+        goods: PropTypes.arrayOf(PropTypes.string).isRequired,
+        bedrooms: PropTypes.number.isRequired,
+        maxAdults: PropTypes.number.isRequired,
         description: PropTypes.string.isRequired,
-        isPremium: PropTypes.bool.isRequired,
+        isPremium: PropTypes.bool.isRequired
       })).isRequired
 };
 

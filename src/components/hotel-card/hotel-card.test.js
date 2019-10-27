@@ -6,12 +6,24 @@ describe(`HotelCard component`, () => {
   it(`is rendered correctly`, () => {
     const mocks = {
       data: {
+        id: 1,
         type: `apartment`,
         price: 0,
         rating: 0,
-        picture: `http://placehold.it/260x200"`,
-        description: `some desc`,
+        picture: `some/src`,
+        images: [`some/src`],
+        title: `some title`,
+        goods: [`first`, `second`],
+        bedrooms: 0,
+        maxAdults: 0,
+        description: `some desc.`,
         isPremium: true,
+        host: {
+          id: 1,
+          isPro: true,
+          name: `Angelina`,
+          avatarUrl: `some/src`
+        }
       },
       onMouseEnter: jest.fn(),
       onMouseLeave: jest.fn()

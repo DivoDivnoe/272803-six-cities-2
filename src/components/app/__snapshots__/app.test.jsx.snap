@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MainPage component is rendered correctly 1`] = `
+exports[`App component is rendered correctly 1`] = `
 <div
   className="page page--gray page--main"
 >

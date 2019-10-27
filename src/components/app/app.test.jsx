@@ -1,8 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import HotelCardsList from './hotel-cards-list.jsx';
+import App from './app.jsx';
 
-describe(`HotelCardsList component`, () => {
+describe(`App component`, () => {
   it(`is rendered correctly`, () => {
     const offers = [
       {
@@ -27,13 +27,11 @@ describe(`HotelCardsList component`, () => {
       }
     ];
 
-    const tree = renderer
-      .create(
-          <HotelCardsList
-            offers={offers}
-          />
-      )
-      .toJSON();
+    const tree = renderer.create(
+        <App
+          offers={offers}
+        />
+    );
 
     expect(tree).toMatchSnapshot();
   });

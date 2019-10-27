@@ -22,6 +22,7 @@ module.exports = {
     port: 1337,
     compress: false,
     open: true,
+    historyApiFallback: true
   },
   devtool: `source-map`
 };
