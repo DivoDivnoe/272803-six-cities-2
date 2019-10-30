@@ -7,6 +7,13 @@ describe(`App component`, () => {
     const offers = [
       {
         id: 1,
+        city: {
+          name: `somecity`,
+          location: {
+            latitude: 0,
+            longitude: 0
+          }
+        },
         type: `apartment`,
         price: 0,
         rating: 0,
@@ -23,13 +30,36 @@ describe(`App component`, () => {
           isPro: true,
           name: `Angelina`,
           avatarUrl: `some/src`
+        },
+        location: {
+          latitude: 0,
+          longitude: 0
         }
       }
     ];
 
+    const leaflet = jest.genMockFromModule(`leaflet`);
+    leaflet.map = () => {
+      return ({
+        setView: jest.fn()
+      });
+    };
+    leaflet.icon = jest.fn();
+    leaflet.tileLayer = () => {
+      return ({
+        addTo: jest.fn()
+      });
+    };
+    leaflet.marker = () => {
+      return ({
+        addTo: jest.fn()
+      });
+    };
+
     const tree = renderer.create(
+
         <App
-          offers={offers}
+          offers={offers} leaflet={leaflet}
         />
     );
 

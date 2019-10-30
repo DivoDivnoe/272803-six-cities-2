@@ -301,6 +301,13 @@ const OfferPage = (props) => {
 OfferPage.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.number.isRequired,
+    city: PropTypes.exact({
+      name: PropTypes.string.isRequired,
+      location: PropTypes.exact({
+        latitude: PropTypes.number.isRequired,
+        longitude: PropTypes.number.isRequired,
+      }).isRequired
+    }).isRequired,
     type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
     price: PropTypes.number.isRequired,
     rating: PropTypes.number.isRequired,
@@ -317,6 +324,10 @@ OfferPage.propTypes = {
       isPro: PropTypes.bool.isRequired,
       name: PropTypes.string.isRequired,
       avatarUrl: PropTypes.string.isRequired
+    }).isRequired,
+    location: PropTypes.exact({
+      latitude: PropTypes.number.isRequired,
+      longitude: PropTypes.number.isRequired
     }).isRequired
   }).isRequired
 };

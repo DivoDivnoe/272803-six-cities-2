@@ -7,6 +7,13 @@ describe(`OfferPage component`, () => {
     const data =
       {
         id: 1,
+        city: {
+          name: `somecity`,
+          location: {
+            latitude: 0,
+            longitude: 0
+          }
+        },
         type: `apartment`,
         price: 0,
         rating: 0,
@@ -23,6 +30,10 @@ describe(`OfferPage component`, () => {
           isPro: true,
           name: `Angelina`,
           avatarUrl: `some/src`
+        },
+        location: {
+          latitude: 0,
+          longitude: 0
         }
       };
 

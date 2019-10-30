@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import MainPage from '../main-page/main-page.jsx';
 import OfferPage from '../offer-page/offer-page.jsx';
 
-const getPageScreen = (offers) => {
+const getPageScreen = (offers, leaflet) => {
   const {pathname} = location;
 
   if (pathname === `/`) {
-    return <MainPage offers={offers} />;
+    return <MainPage offers={offers} leaflet={leaflet} />;
   }
 
   const [path, id] = pathname.slice(1).split(`/`);
@@ -22,15 +22,23 @@ const getPageScreen = (offers) => {
 };
 
 const App = (props) => {
-  const {offers} = props;
+  const {offers, leaflet} = props;
 
-  return getPageScreen(offers);
+  return getPageScreen(offers, leaflet);
 };
 
 App.propTypes = {
+  leaflet: PropTypes.object.isRequired,
   offers: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
+        city: PropTypes.exact({
+          name: PropTypes.string.isRequired,
+          location: PropTypes.exact({
+            latitude: PropTypes.number.isRequired,
+            longitude: PropTypes.number.isRequired,
+          }).isRequired
+        }).isRequired,
         type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
         price: PropTypes.number.isRequired,
         rating: PropTypes.number.isRequired,
@@ -47,6 +55,10 @@ App.propTypes = {
           isPro: PropTypes.bool.isRequired,
           name: PropTypes.string.isRequired,
           avatarUrl: PropTypes.string.isRequired
+        }).isRequired,
+        location: PropTypes.exact({
+          latitude: PropTypes.number.isRequired,
+          longitude: PropTypes.number.isRequired
         }).isRequired
       })).isRequired,
 };
