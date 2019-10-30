@@ -10,6 +10,13 @@ describe(`HotelCard component`, () => {
     const mocks = {
       data: {
         id: 1,
+        city: {
+          name: `somecity`,
+          location: {
+            latitude: 0,
+            longitude: 0
+          }
+        },
         type: `apartment`,
         price: 0,
         rating: 0,
@@ -26,6 +33,10 @@ describe(`HotelCard component`, () => {
           isPro: true,
           name: `Angelina`,
           avatarUrl: `some/src`
+        },
+        location: {
+          latitude: 0,
+          longitude: 0
         }
       },
       onMouseEnter: jest.fn(),

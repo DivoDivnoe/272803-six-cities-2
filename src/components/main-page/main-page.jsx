@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import HotelCardsList from '../hotel-cards-list/hotel-cards-list.jsx';
+import Map from '../map/map.jsx';
 
 const MainPage = (props) => {
-  const {offers} = props;
+  const {offers, leaflet} = props;
+  const city = offers[0].city.location;
+  const hotels = offers.map((offer) => offer.location);
 
   return (
     <div className="page page--gray page--main">
@@ -101,7 +104,7 @@ const MainPage = (props) => {
 
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map coords={{city, hotels}} leaflet={leaflet} />
             </div>
           </div>
         </div>
@@ -111,9 +114,17 @@ const MainPage = (props) => {
 };
 
 MainPage.propTypes = {
+  leaflet: PropTypes.object.isRequired,
   offers: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
+        city: PropTypes.exact({
+          name: PropTypes.string.isRequired,
+          location: PropTypes.exact({
+            latitude: PropTypes.number.isRequired,
+            longitude: PropTypes.number.isRequired,
+          }).isRequired
+        }).isRequired,
         type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
         price: PropTypes.number.isRequired,
         rating: PropTypes.number.isRequired,
@@ -124,7 +135,17 @@ MainPage.propTypes = {
         bedrooms: PropTypes.number.isRequired,
         maxAdults: PropTypes.number.isRequired,
         description: PropTypes.string.isRequired,
-        isPremium: PropTypes.bool.isRequired
+        isPremium: PropTypes.bool.isRequired,
+        host: PropTypes.exact({
+          id: PropTypes.number.isRequired,
+          isPro: PropTypes.bool.isRequired,
+          name: PropTypes.string.isRequired,
+          avatarUrl: PropTypes.string.isRequired
+        }).isRequired,
+        location: PropTypes.exact({
+          latitude: PropTypes.number.isRequired,
+          longitude: PropTypes.number.isRequired
+        }).isRequired
       })).isRequired
 };
 
