@@ -11,7 +11,8 @@ describe(`HotelCard component`, () => {
           name: `somecity`,
           location: {
             latitude: 0,
-            longitude: 0
+            longitude: 0,
+            zoom: 1
           }
         },
         type: `apartment`,
@@ -33,7 +34,8 @@ describe(`HotelCard component`, () => {
         },
         location: {
           latitude: 0,
-          longitude: 0
+          longitude: 0,
+          zoom: 1
         }
       },
       onMouseEnter: jest.fn(),

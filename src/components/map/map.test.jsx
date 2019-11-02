@@ -7,12 +7,14 @@ describe(`Map component`, () => {
     const coords = {
       city: {
         latitude: 0,
-        longitude: 0
+        longitude: 0,
+        zoom: 1
       },
       hotels: [
         {
           latitude: 10,
-          longitude: 10
+          longitude: 10,
+          zoom: 1
         }
       ]
     };

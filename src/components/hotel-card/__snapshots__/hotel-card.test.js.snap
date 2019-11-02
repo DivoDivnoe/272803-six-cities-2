@@ -100,7 +100,9 @@ exports[`HotelCard component is rendered correctly 1`] = `
     </h2>
     <p
       className="place-card__type"
-    />
+    >
+      Apartment
+    </p>
   </div>
 </article>
 `;

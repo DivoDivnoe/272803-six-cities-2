@@ -10,10 +10,10 @@ class HotelCardsList extends PureComponent {
   }
 
   render() {
-    const {offers} = this.props;
+    const {offers, classNames} = this.props;
 
     return (
-      <div className="cities__places-list places__list tabs__content">
+      <div className={classNames.join(` `)}>
         {offers.map((data, index) => (
           <HotelCard
             data={data}
@@ -38,6 +38,9 @@ class HotelCardsList extends PureComponent {
 }
 
 HotelCardsList.propTypes = {
+  classNames: PropTypes.arrayOf(
+      PropTypes.string
+  ).isRequired,
   offers: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
@@ -46,6 +49,7 @@ HotelCardsList.propTypes = {
           location: PropTypes.exact({
             latitude: PropTypes.number.isRequired,
             longitude: PropTypes.number.isRequired,
+            zoom: PropTypes.number.isRequired
           }).isRequired
         }).isRequired,
         type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
@@ -67,7 +71,8 @@ HotelCardsList.propTypes = {
         }).isRequired,
         location: PropTypes.exact({
           latitude: PropTypes.number.isRequired,
-          longitude: PropTypes.number.isRequired
+          longitude: PropTypes.number.isRequired,
+          zoom: PropTypes.number.isRequired
         }).isRequired
       })).isRequired,
 };

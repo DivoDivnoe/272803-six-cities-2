@@ -13,7 +13,8 @@ describe(`App component`, () => {
           name: `somecity`,
           location: {
             latitude: 0,
-            longitude: 0
+            longitude: 0,
+            zoom: 1
           }
         },
         type: `apartment`,
@@ -35,7 +36,8 @@ describe(`App component`, () => {
         },
         location: {
           latitude: 0,
-          longitude: 0
+          longitude: 0,
+          zoom: 1
         }
       }
     ];

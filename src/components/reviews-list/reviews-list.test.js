@@ -2,6 +2,8 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import ReviewsList from './reviews-list.jsx';
 
+jest.mock(`../review/review.jsx`, () => jest.fn().mockReturnValue(null));
+
 describe(`ReviewsList component`, () => {
   it(`is rendered correctly`, () => {
     const reviews = [

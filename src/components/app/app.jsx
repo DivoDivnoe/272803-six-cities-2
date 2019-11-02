@@ -13,9 +13,7 @@ const getPageScreen = (offers, leaflet, reviews) => {
   const [path, id] = pathname.slice(1).split(`/`);
 
   if (path === `offer`) {
-    const data = offers.find((offer) => offer.id === +id);
-
-    return <OfferPage data={data} reviews={reviews} />;
+    return <OfferPage offers={offers} leaflet={leaflet} reviews={reviews} id={+id} />;
   }
 
   return null;
@@ -37,6 +35,7 @@ App.propTypes = {
           location: PropTypes.exact({
             latitude: PropTypes.number.isRequired,
             longitude: PropTypes.number.isRequired,
+            zoom: PropTypes.number.isRequired
           }).isRequired
         }).isRequired,
         type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
@@ -58,7 +57,8 @@ App.propTypes = {
         }).isRequired,
         location: PropTypes.exact({
           latitude: PropTypes.number.isRequired,
-          longitude: PropTypes.number.isRequired
+          longitude: PropTypes.number.isRequired,
+          zoom: PropTypes.number.isRequired
         }).isRequired
       })).isRequired,
   reviews: PropTypes.arrayOf(PropTypes.exact({

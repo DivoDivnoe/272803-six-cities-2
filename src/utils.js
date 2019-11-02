@@ -7,4 +7,14 @@ const parseDateString = (dateStr) => {
   return {year, month};
 };
 
-export {parseDateString};
+const findDistance = (coords1, coords2) => {
+  return Math.sqrt(
+      Math.pow(coords2.latitude - coords1.latitude, 2) +
+      Math.pow(coords2.longitude - coords1.longitude, 2)
+  );
+};
+
+export {
+  parseDateString,
+  findDistance
+};
