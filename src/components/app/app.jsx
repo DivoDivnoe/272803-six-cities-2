@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MainPage from '../main-page/main-page.jsx';
 import OfferPage from '../offer-page/offer-page.jsx';
 
-const getPageScreen = (offers, leaflet) => {
+const getPageScreen = (offers, leaflet, reviews) => {
   const {pathname} = location;
 
   if (pathname === `/`) {
@@ -15,16 +15,16 @@ const getPageScreen = (offers, leaflet) => {
   if (path === `offer`) {
     const data = offers.find((offer) => offer.id === +id);
 
-    return <OfferPage data={data} />;
+    return <OfferPage data={data} reviews={reviews} />;
   }
 
   return null;
 };
 
 const App = (props) => {
-  const {offers, leaflet} = props;
+  const {offers, leaflet, reviews} = props;
 
-  return getPageScreen(offers, leaflet);
+  return getPageScreen(offers, leaflet, reviews);
 };
 
 App.propTypes = {
@@ -61,6 +61,18 @@ App.propTypes = {
           longitude: PropTypes.number.isRequired
         }).isRequired
       })).isRequired,
+  reviews: PropTypes.arrayOf(PropTypes.exact({
+    id: PropTypes.number.isRequired,
+    user: PropTypes.exact({
+      id: PropTypes.number.isRequired,
+      isPro: PropTypes.bool.isRequired,
+      name: PropTypes.string.isRequired,
+      avatarUrl: PropTypes.string.isRequired,
+    }).isRequired,
+    rating: PropTypes.number.isRequired,
+    comment: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+  })).isRequired
 };
 
 export default App;

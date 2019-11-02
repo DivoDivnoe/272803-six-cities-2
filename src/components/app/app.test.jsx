@@ -2,6 +2,8 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import App from './app.jsx';
 
+jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
+
 describe(`App component`, () => {
   it(`is rendered correctly`, () => {
     const offers = [
@@ -38,28 +40,27 @@ describe(`App component`, () => {
       }
     ];
 
+    const reviews = [
+      {
+        id: 1,
+        user: {
+          id: 1,
+          isPro: true,
+          name: `Trump`,
+          avatarUrl: `some/src`
+        },
+        rating: 1,
+        comment: `some comment`,
+        date: `2019-05-08T14:13:56.569Z`
+      }];
+
     const leaflet = jest.genMockFromModule(`leaflet`);
-    leaflet.map = () => {
-      return ({
-        setView: jest.fn()
-      });
-    };
-    leaflet.icon = jest.fn();
-    leaflet.tileLayer = () => {
-      return ({
-        addTo: jest.fn()
-      });
-    };
-    leaflet.marker = () => {
-      return ({
-        addTo: jest.fn()
-      });
-    };
 
     const tree = renderer.create(
-
         <App
-          offers={offers} leaflet={leaflet}
+          offers={offers}
+          leaflet={leaflet}
+          reviews={reviews}
         />
     );
 

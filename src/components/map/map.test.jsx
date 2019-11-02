@@ -36,8 +36,7 @@ describe(`Map component`, () => {
     };
 
     const tree = renderer.create(
-        <Map coords={coords} leaflet={leaflet} />,
-        {createNodeMock: (el) => el}
+        <Map coords={coords} leaflet={leaflet} />
     ).toJSON();
 
     expect(tree).toMatchSnapshot();

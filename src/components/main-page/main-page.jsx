@@ -104,7 +104,9 @@ const MainPage = (props) => {
 
             </section>
             <div className="cities__right-section">
-              <Map coords={{city, hotels}} leaflet={leaflet} />
+              <section className="cities__map map">
+                <Map coords={{city, hotels}} leaflet={leaflet} />
+              </section>
             </div>
           </div>
         </div>

@@ -5,13 +5,12 @@ class Map extends PureComponent {
   constructor(props) {
     super(props);
 
-    this._mapRef = React.createRef();
     this.leaflet = this.props.leaflet;
   }
 
   render() {
     return (
-      <section className="cities__map map" ref={this._mapRef}></section>
+      <div id="map" style={{height: `100%`}}></div>
     );
   }
 
@@ -20,7 +19,7 @@ class Map extends PureComponent {
     const {city, hotels} = coords;
     const zoom = 12;
 
-    const map = this.leaflet.map(this._mapRef.current, {
+    const map = this.leaflet.map(`map`, {
       center: Object.values(city),
       zoom,
       zoomControl: false,
