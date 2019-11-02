@@ -1,48 +1,49 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
+const ICON_SIZE = 30;
+
 class Map extends PureComponent {
   constructor(props) {
     super(props);
-
-    this._mapRef = React.createRef();
-    this.leaflet = this.props.leaflet;
   }
 
   render() {
     return (
-      <section className="cities__map map" ref={this._mapRef}></section>
+      <div id="map" style={{height: `100%`}}></div>
     );
   }
 
   componentDidMount() {
-    const {coords} = this.props;
+    const {coords, leaflet} = this.props;
     const {city, hotels} = coords;
     const zoom = 12;
 
-    const map = this.leaflet.map(this._mapRef.current, {
+    const map = leaflet.map(`map`, {
       center: Object.values(city),
-      zoom,
+      zoom: city.zoom,
       zoomControl: false,
       marker: true
     });
 
-    const icon = this.leaflet.icon({
+    const icon = leaflet.icon({
       iconUrl: `/img/pin.svg`,
-      iconSize: [30, 30]
+      iconSize: [ICON_SIZE, ICON_SIZE]
     });
 
     map.setView(Object.values(city), zoom);
 
-    this.leaflet
+    leaflet
       .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
         attribution: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>`
       })
       .addTo(map);
 
     hotels.forEach((hotel) => {
-      this.leaflet
-      .marker(Object.values(hotel), {icon})
+      const hotelCoords = [hotel.latitude, hotel.longitude];
+
+      leaflet
+      .marker(hotelCoords, {icon})
       .addTo(map);
     });
   }
@@ -54,11 +55,13 @@ Map.propTypes = {
     city: PropTypes.exact({
       latitude: PropTypes.number.isRequired,
       longitude: PropTypes.number.isRequired,
+      zoom: PropTypes.number.isRequired
     }).isRequired,
     hotels: PropTypes.arrayOf(
         PropTypes.exact({
           latitude: PropTypes.number.isRequired,
           longitude: PropTypes.number.isRequired,
+          zoom: PropTypes.number.isRequired
         })
     ).isRequired
   }).isRequired

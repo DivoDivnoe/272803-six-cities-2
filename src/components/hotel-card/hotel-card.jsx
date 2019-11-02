@@ -2,11 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {MAX_RATING} from '../../constants';
 
-const houseType = {
-  appartment: `Appartment`,
-  room: `Private Room`,
-  house: `House`,
-  hotel: `Hotel`
+const HouseType = {
+  APARTMENT: `apartment`,
+  ROOM: `room`,
+  HOUSE: `house`,
+  HOTEL: `hotel`
+};
+
+const houseTypeMap = {
+  [HouseType.APARTMENT]: `Apartment`,
+  [HouseType.ROOM]: `Private Room`,
+  [HouseType.HOUSE]: `House`,
+  [HouseType.HOTEL]: `Hotel`
 };
 
 const HotelCard = (props) => {
@@ -53,7 +60,8 @@ const HotelCard = (props) => {
         <h2 className="place-card__name">
           <a href="#">{title}</a>
         </h2>
-        <p className="place-card__type">{houseType[type]}</p>
+
+        <p className="place-card__type">{houseTypeMap[type]}</p>
       </div>
     </article>
   );
@@ -67,6 +75,7 @@ HotelCard.propTypes = {
       location: PropTypes.exact({
         latitude: PropTypes.number.isRequired,
         longitude: PropTypes.number.isRequired,
+        zoom: PropTypes.number.isRequired
       }).isRequired
     }).isRequired,
     type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
@@ -88,7 +97,8 @@ HotelCard.propTypes = {
     }).isRequired,
     location: PropTypes.exact({
       latitude: PropTypes.number.isRequired,
-      longitude: PropTypes.number.isRequired
+      longitude: PropTypes.number.isRequired,
+      zoom: PropTypes.number.isRequired
     }).isRequired
   }).isRequired,
   onMouseEnter: PropTypes.func.isRequired,

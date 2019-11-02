@@ -7,12 +7,14 @@ describe(`Map component`, () => {
     const coords = {
       city: {
         latitude: 0,
-        longitude: 0
+        longitude: 0,
+        zoom: 1
       },
       hotels: [
         {
           latitude: 10,
-          longitude: 10
+          longitude: 10,
+          zoom: 1
         }
       ]
     };
@@ -36,8 +38,7 @@ describe(`Map component`, () => {
     };
 
     const tree = renderer.create(
-        <Map coords={coords} leaflet={leaflet} />,
-        {createNodeMock: (el) => el}
+        <Map coords={coords} leaflet={leaflet} />
     ).toJSON();
 
     expect(tree).toMatchSnapshot();

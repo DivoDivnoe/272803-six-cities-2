@@ -7,6 +7,7 @@ const MainPage = (props) => {
   const {offers, leaflet} = props;
   const city = offers[0].city.location;
   const hotels = offers.map((offer) => offer.location);
+  const classNames = [`cities__places-list`, `places__list`, `tabs__content`];
 
   return (
     <div className="page page--gray page--main">
@@ -100,11 +101,13 @@ const MainPage = (props) => {
 
               </form>
 
-              <HotelCardsList offers={offers} />
+              <HotelCardsList offers={offers} classNames={classNames} />
 
             </section>
             <div className="cities__right-section">
-              <Map coords={{city, hotels}} leaflet={leaflet} />
+              <section className="cities__map map" style={{background: `none`}}>
+                <Map coords={{city, hotels}} leaflet={leaflet} />
+              </section>
             </div>
           </div>
         </div>
@@ -123,6 +126,7 @@ MainPage.propTypes = {
           location: PropTypes.exact({
             latitude: PropTypes.number.isRequired,
             longitude: PropTypes.number.isRequired,
+            zoom: PropTypes.number.isRequired
           }).isRequired
         }).isRequired,
         type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
@@ -144,7 +148,8 @@ MainPage.propTypes = {
         }).isRequired,
         location: PropTypes.exact({
           latitude: PropTypes.number.isRequired,
-          longitude: PropTypes.number.isRequired
+          longitude: PropTypes.number.isRequired,
+          zoom: PropTypes.number.isRequired
         }).isRequired
       })).isRequired
 };

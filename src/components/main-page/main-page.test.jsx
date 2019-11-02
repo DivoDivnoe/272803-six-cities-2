@@ -2,6 +2,8 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import MainPage from './main-page.jsx';
 
+jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
+
 describe(`MainPage component`, () => {
   it(`is rendered correctly`, () => {
     const offers = [
@@ -11,7 +13,8 @@ describe(`MainPage component`, () => {
           name: `somecity`,
           location: {
             latitude: 0,
-            longitude: 0
+            longitude: 0,
+            zoom: 1
           }
         },
         type: `apartment`,
@@ -33,33 +36,19 @@ describe(`MainPage component`, () => {
         },
         location: {
           latitude: 0,
-          longitude: 0
+          longitude: 0,
+          zoom: 1
         }
       }
     ];
 
     const leaflet = jest.genMockFromModule(`leaflet`);
-    leaflet.map = () => {
-      return ({
-        setView: jest.fn()
-      });
-    };
-    leaflet.icon = jest.fn();
-    leaflet.tileLayer = () => {
-      return ({
-        addTo: jest.fn()
-      });
-    };
-    leaflet.marker = () => {
-      return ({
-        addTo: jest.fn()
-      });
-    };
 
     const tree = renderer
       .create(
           <MainPage
-            offers={offers} leaflet={leaflet}
+            offers={offers}
+            leaflet={leaflet}
           />
       )
       .toJSON();

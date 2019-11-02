@@ -5,7 +5,8 @@ const offers = [
       name: `Amsterdam`,
       location: {
         latitude: 52.370216,
-        longitude: 4.895168
+        longitude: 4.895168,
+        zoom: 12
       }
     },
     type: `apartment`,
@@ -35,6 +36,7 @@ const offers = [
     location: {
       latitude: 52.3909553943508,
       longitude: 4.85309666406198,
+      zoom: 12
     },
   },
   {
@@ -43,7 +45,8 @@ const offers = [
       name: `Amsterdam`,
       location: {
         latitude: 52.370216,
-        longitude: 4.895168
+        longitude: 4.895168,
+        zoom: 12
       }
     },
     type: `room`,
@@ -73,6 +76,7 @@ const offers = [
     location: {
       latitude: 52.369553943508,
       longitude: 4.85309666406198,
+      zoom: 12
     },
   },
   {
@@ -81,7 +85,8 @@ const offers = [
       name: `Amsterdam`,
       location: {
         latitude: 52.370216,
-        longitude: 4.895168
+        longitude: 4.895168,
+        zoom: 12
       }
     },
     type: `apartment`,
@@ -111,6 +116,7 @@ const offers = [
     location: {
       latitude: 52.3909553943508,
       longitude: 4.929309666406198,
+      zoom: 12
     },
   },
   {
@@ -119,7 +125,8 @@ const offers = [
       name: `Amsterdam`,
       location: {
         latitude: 52.370216,
-        longitude: 4.895168
+        longitude: 4.895168,
+        zoom: 12
       }
     },
     type: `apartment`,
@@ -149,6 +156,7 @@ const offers = [
     location: {
       latitude: 52.3809553943508,
       longitude: 4.939309666406198,
+      zoom: 12
     },
   },
 ];

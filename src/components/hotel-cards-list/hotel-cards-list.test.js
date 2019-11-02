@@ -4,6 +4,8 @@ import HotelCardsList from './hotel-cards-list.jsx';
 
 describe(`HotelCardsList component`, () => {
   it(`is rendered correctly`, () => {
+    const classNames = [``];
+
     const offers = [
       {
         id: 1,
@@ -11,7 +13,8 @@ describe(`HotelCardsList component`, () => {
           name: `somecity`,
           location: {
             latitude: 0,
-            longitude: 0
+            longitude: 0,
+            zoom: 1
           }
         },
         type: `apartment`,
@@ -33,7 +36,8 @@ describe(`HotelCardsList component`, () => {
         },
         location: {
           latitude: 0,
-          longitude: 0
+          longitude: 0,
+          zoom: 1
         }
       }
     ];
@@ -42,6 +46,7 @@ describe(`HotelCardsList component`, () => {
       .create(
           <HotelCardsList
             offers={offers}
+            classNames={classNames}
           />
       )
       .toJSON();

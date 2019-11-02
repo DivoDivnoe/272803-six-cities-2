@@ -352,7 +352,9 @@ exports[`MainPage component is rendered correctly 1`] = `
                 </h2>
                 <p
                   className="place-card__type"
-                />
+                >
+                  Apartment
+                </p>
               </div>
             </article>
           </div>
@@ -362,6 +364,11 @@ exports[`MainPage component is rendered correctly 1`] = `
         >
           <section
             className="cities__map map"
+            style={
+              Object {
+                "background": "none",
+              }
+            }
           />
         </div>
       </div>
