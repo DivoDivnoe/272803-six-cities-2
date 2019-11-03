@@ -82,10 +82,10 @@ const offers = [
   {
     id: 3,
     city: {
-      name: `Amsterdam`,
+      name: `Paris`,
       location: {
-        latitude: 52.370216,
-        longitude: 4.895168,
+        latitude: 50.370216,
+        longitude: 3.895168,
         zoom: 12
       }
     },
@@ -114,18 +114,18 @@ const offers = [
       avatarUrl: `http://placehold.it/74x74`,
     },
     location: {
-      latitude: 52.3909553943508,
-      longitude: 4.929309666406198,
+      latitude: 50.3909553943508,
+      longitude: 3.929309666406198,
       zoom: 12
     },
   },
   {
     id: 4,
     city: {
-      name: `Amsterdam`,
+      name: `Berlin`,
       location: {
-        latitude: 52.370216,
-        longitude: 4.895168,
+        latitude: 50.370216,
+        longitude: 2.895168,
         zoom: 12
       }
     },
@@ -154,8 +154,8 @@ const offers = [
       avatarUrl: `http://placehold.it/74x74`,
     },
     location: {
-      latitude: 52.3809553943508,
-      longitude: 4.939309666406198,
+      latitude: 50.3809553943508,
+      longitude: 2.939309666406198,
       zoom: 12
     },
   },
