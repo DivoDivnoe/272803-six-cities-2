@@ -1,8 +1,11 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import App from './app.jsx';
+import {App} from './app.jsx';
 
 jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
+jest.mock(`../cities-list/cities-list.jsx`, () => jest.fn().mockReturnValue(null));
+jest.mock(`../hotel-cards-list/hotel-cards-list.jsx`, () => jest.fn().mockReturnValue(null));
+jest.mock(`../reviews-list/reviews-list.jsx`, () => jest.fn().mockReturnValue(null));
 
 describe(`App component`, () => {
   it(`is rendered correctly`, () => {
@@ -57,12 +60,22 @@ describe(`App component`, () => {
       }];
 
     const leaflet = jest.genMockFromModule(`leaflet`);
+    const city = ``;
+    const cities = [`Moscow`];
+    const setOffers = jest.fn();
+    const onChangeCity = jest.fn();
+    const setCities = jest.fn();
 
     const tree = renderer.create(
         <App
           offers={offers}
           leaflet={leaflet}
           reviews={reviews}
+          city={city}
+          cities={cities}
+          setOffers={setOffers}
+          onChangeCity={onChangeCity}
+          setCities={setCities}
         />
     );
 

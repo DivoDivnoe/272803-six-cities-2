@@ -2,11 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import HotelCardsList from '../hotel-cards-list/hotel-cards-list.jsx';
 import Map from '../map/map.jsx';
+import CitiesList from '../cities-list/cities-list.jsx';
 
 const MainPage = (props) => {
-  const {offers, leaflet} = props;
-  const city = offers[0].city.location;
-  const hotels = offers.map((offer) => offer.location);
+  const {offers, leaflet, city, cities, onChangeCity} = props;
+
+  if (!offers.length) {
+    return null;
+  }
+
+  const filteredOffers = offers.filter((offer) => offer.city.name === city);
+  const cityCoords = offers.find((offer) => offer.city.name === city).city.location;
+  const hotels = filteredOffers.map((offer) => offer.location);
   const classNames = [`cities__places-list`, `places__list`, `tabs__content`];
 
   return (
@@ -36,47 +43,12 @@ const MainPage = (props) => {
 
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
-        <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
-          </section>
-        </div>
+        <CitiesList cities={cities} city={city} onChangeCity={onChangeCity} />
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">312 places to stay in Amsterdam</b>
+              <b className="places__found">{filteredOffers.length} place{filteredOffers.length > 1 ? `s` : ``} to stay in {city}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex="0">
@@ -106,7 +78,7 @@ const MainPage = (props) => {
             </section>
             <div className="cities__right-section">
               <section className="cities__map map" style={{background: `none`}}>
-                <Map coords={{city, hotels}} leaflet={leaflet} />
+                <Map coords={{city: cityCoords, hotels}} leaflet={leaflet} />
               </section>
             </div>
           </div>
@@ -117,6 +89,8 @@ const MainPage = (props) => {
 };
 
 MainPage.propTypes = {
+  cities: PropTypes.arrayOf(PropTypes.string).isRequired,
+  city: PropTypes.string.isRequired,
   leaflet: PropTypes.object.isRequired,
   offers: PropTypes.arrayOf(
       PropTypes.shape({
@@ -151,7 +125,8 @@ MainPage.propTypes = {
           longitude: PropTypes.number.isRequired,
           zoom: PropTypes.number.isRequired
         }).isRequired
-      })).isRequired
+      })).isRequired,
+  onChangeCity: PropTypes.func.isRequired
 };
 
 export default MainPage;

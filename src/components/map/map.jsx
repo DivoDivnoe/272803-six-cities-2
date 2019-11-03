@@ -15,9 +15,17 @@ class Map extends PureComponent {
   }
 
   componentDidMount() {
+    this._init();
+  }
+
+  componentDidUpdate() {
+    this.map.remove();
+    this._init();
+  }
+
+  _init() {
     const {coords, leaflet} = this.props;
     const {city, hotels} = coords;
-    const zoom = 12;
 
     const map = leaflet.map(`map`, {
       center: Object.values(city),
@@ -31,7 +39,7 @@ class Map extends PureComponent {
       iconSize: [ICON_SIZE, ICON_SIZE]
     });
 
-    map.setView(Object.values(city), zoom);
+    map.setView(Object.values(city), city.zoom);
 
     leaflet
       .tileLayer(`https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png`, {
@@ -46,6 +54,8 @@ class Map extends PureComponent {
       .marker(hotelCoords, {icon})
       .addTo(map);
     });
+
+    this.map = map;
   }
 }
 
