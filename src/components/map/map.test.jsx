@@ -27,18 +27,25 @@ describe(`Map component`, () => {
     };
     leaflet.icon = jest.fn();
     leaflet.tileLayer = () => {
-      return ({
-        addTo: jest.fn()
-      });
+      return {addTo: jest.fn()};
     };
     leaflet.marker = () => {
-      return ({
+      return {
+        on: jest.fn(),
         addTo: jest.fn()
-      });
+      };
     };
 
+    const activeHotel = 0;
+    const city = ``;
+
     const tree = renderer.create(
-        <Map coords={coords} leaflet={leaflet} />
+        <Map
+          coords={coords}
+          leaflet={leaflet}
+          activeHotel={activeHotel}
+          city={city}
+        />
     ).toJSON();
 
     expect(tree).toMatchSnapshot();

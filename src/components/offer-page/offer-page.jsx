@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReviewsList from '../reviews-list/reviews-list.jsx';
 import Map from '../map/map.jsx';
 import HotelCardsList from '../hotel-cards-list/hotel-cards-list.jsx';
-import {MAX_RATING} from '../../constants';
+import {MAX_RATING, DEFAULT_ACTIVE_HOTEL_INDEX} from '../../constants';
 import {findDistance} from '../../utils';
 
 const CLOSEST_HOTELS_AMOUNT = 3;
@@ -16,18 +16,25 @@ class OfferPage extends PureComponent {
     const currentOffer = offers.find((offer) => offer.id === id);
 
     const closest = OfferPage.findClosestHotels(
-        offers.filter((offer) => offer.id !== id),
+        offers.filter((offer) => offer.id !== id && offer.city.name === currentOffer.city.name),
         CLOSEST_HOTELS_AMOUNT,
         currentOffer.location
     );
+    this.currentOffer = currentOffer;
 
-    this.state = {closest};
+    this.state = {
+      closest,
+      activeHotel: DEFAULT_ACTIVE_HOTEL_INDEX
+    };
+
+    this.handleActiveHotel = this.handleActiveHotel.bind(this);
+    this.handleDisactiveHotel = this.handleDisactiveHotel.bind(this);
   }
 
   static findClosestHotels(offers, amount, location) {
     const {latitude, longitude} = location;
 
-    return offers
+    return offers.slice()
       .sort((prev, next) => {
         const {longitude: prevLongitude, latitude: prevLatitude} = prev.location;
         const prevLocation = {latitude: prevLatitude, longitude: prevLongitude};
@@ -211,18 +218,35 @@ class OfferPage extends PureComponent {
               <Map
                 coords={{city: city.location, hotels: this.state.closest.map((item) => item.location)}}
                 leaflet={leaflet}
+                activeHotel={this.state.activeHotel}
+                city={this.currentOffer.city.name}
               />
             </section>
           </section>
           <div className="container">
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
-              {<HotelCardsList offers={this.state.closest} classNames={classNames} />}
+              {<HotelCardsList
+                offers={this.state.closest}
+                classNames={classNames}
+                onActiveHotel={this.handleActiveHotel}
+                onDisactiveHotel={this.handleDisactiveHotel}
+              />}
             </section>
           </div>
         </main>
       </div>
     );
+  }
+
+  handleActiveHotel(offer) {
+    const index = this.state.closest.findIndex((item) => item.id === offer.id);
+
+    this.setState({activeHotel: index});
+  }
+
+  handleDisactiveHotel() {
+    this.setState({activeHotel: DEFAULT_ACTIVE_HOTEL_INDEX});
   }
 }
 

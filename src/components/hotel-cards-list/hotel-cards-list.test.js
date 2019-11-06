@@ -2,6 +2,8 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import HotelCardsList from './hotel-cards-list.jsx';
 
+jest.mock(`../hotel-card/hotel-card.jsx`, () => jest.fn().mockReturnValue(null));
+
 describe(`HotelCardsList component`, () => {
   it(`is rendered correctly`, () => {
     const classNames = [``];
@@ -41,12 +43,16 @@ describe(`HotelCardsList component`, () => {
         }
       }
     ];
+    const onActiveHotel = jest.fn();
+    const onDisactiveHotel = jest.fn();
 
     const tree = renderer
       .create(
           <HotelCardsList
             offers={offers}
             classNames={classNames}
+            onActiveHotel={onActiveHotel}
+            onDisactiveHotel={onDisactiveHotel}
           />
       )
       .toJSON();
