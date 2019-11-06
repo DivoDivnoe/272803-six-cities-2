@@ -6,6 +6,18 @@ const ICON_SIZE = 30;
 class Map extends PureComponent {
   constructor(props) {
     super(props);
+
+    const {leaflet} = this.props;
+
+    this.icon = leaflet.icon({
+      iconUrl: `/img/pin.svg`,
+      iconSize: [ICON_SIZE, ICON_SIZE]
+    });
+
+    this.iconHover = leaflet.icon({
+      iconUrl: `/img/pin-active.svg`,
+      iconSize: [ICON_SIZE, ICON_SIZE]
+    });
   }
 
   render() {
@@ -18,25 +30,36 @@ class Map extends PureComponent {
     this._init();
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeHotel !== this.props.activeHotel) {
+      const currentMarker = this.markers[this.props.activeHotel];
+      this.markers.forEach((item) => item.setIcon(this.icon));
+
+      if (currentMarker) {
+        currentMarker.setIcon(this.iconHover);
+      }
+    }
+
+    if (prevProps.city === this.props.city) {
+      return false;
+    }
+
     this.map.remove();
     this._init();
+
+    return true;
   }
 
   _init() {
     const {coords, leaflet} = this.props;
     const {city, hotels} = coords;
+    const {icon, iconHover} = this;
 
     const map = leaflet.map(`map`, {
       center: Object.values(city),
       zoom: city.zoom,
       zoomControl: false,
       marker: true
-    });
-
-    const icon = leaflet.icon({
-      iconUrl: `/img/pin.svg`,
-      iconSize: [ICON_SIZE, ICON_SIZE]
     });
 
     map.setView(Object.values(city), city.zoom);
@@ -47,12 +70,17 @@ class Map extends PureComponent {
       })
       .addTo(map);
 
+    this.markers = [];
+
     hotels.forEach((hotel) => {
       const hotelCoords = [hotel.latitude, hotel.longitude];
+      const marker = leaflet.marker(hotelCoords, {icon});
 
-      leaflet
-      .marker(hotelCoords, {icon})
-      .addTo(map);
+      marker.on(`mouseover`, () => marker.setIcon(iconHover));
+      marker.on(`mouseout`, () => marker.setIcon(icon));
+
+      marker.addTo(map);
+      this.markers.push(marker);
     });
 
     this.map = map;
@@ -60,6 +88,8 @@ class Map extends PureComponent {
 }
 
 Map.propTypes = {
+  activeHotel: PropTypes.number.isRequired,
+  city: PropTypes.string.isRequired,
   leaflet: PropTypes.object.isRequired,
   coords: PropTypes.exact({
     city: PropTypes.exact({

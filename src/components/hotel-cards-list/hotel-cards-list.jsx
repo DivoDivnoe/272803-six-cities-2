@@ -5,20 +5,18 @@ import HotelCard from '../hotel-card/hotel-card.jsx';
 class HotelCardsList extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {currentCard: null};
   }
 
   render() {
-    const {offers, classNames} = this.props;
+    const {offers, classNames, onActiveHotel, onDisactiveHotel} = this.props;
 
     return (
       <div className={classNames.join(` `)}>
         {offers.map((data, index) => (
           <HotelCard
             data={data}
-            onMouseEnter={(card) => this.mouseEnterHandler(card)}
-            onMouseLeave={() => this.mouseLeaveHandler()}
+            onMouseEnter={onActiveHotel}
+            onMouseLeave={onDisactiveHotel}
             key={`card-${index}`}
           />
         ))}
@@ -75,6 +73,8 @@ HotelCardsList.propTypes = {
           zoom: PropTypes.number.isRequired
         }).isRequired
       })).isRequired,
+  onActiveHotel: PropTypes.func.isRequired,
+  onDisactiveHotel: PropTypes.func.isRequired
 };
 
 export default HotelCardsList;
