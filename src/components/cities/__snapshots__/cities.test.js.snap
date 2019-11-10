@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cities component is rendered correctly 1`] = `
+<div
+  className="cities"
+>
+  <div
+    className="cities__places-container container "
+  >
+    <section
+      className="cities__places places"
+    >
+      <h2
+        className="visually-hidden"
+      >
+        Places
+      </h2>
+      <b
+        className="places__found"
+      >
+        1
+         place
+        
+         to stay in 
+        somecity
+      </b>
+    </section>
+    <div
+      className="cities__right-section"
+    >
+      <section
+        className="cities__map map"
+        style={
+          Object {
+            "background": "none",
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

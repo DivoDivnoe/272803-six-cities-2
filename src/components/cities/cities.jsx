@@ -1,55 +1,93 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CitiesList from '../cities-list/cities-list.jsx';
-import Page from '../page/page.jsx';
-import Cities from '../cities/cities.jsx';
+import Map from '../map/map.jsx';
+import HotelCardsList from '../hotel-cards-list/hotel-cards-list.jsx';
+import MainPageEmpty from '../main-page-empty/main-page-empty.jsx';
+import CitiesWrapper from '../cities-wrapper/cities-wrapper.jsx';
 import {SortType} from '../../constants';
 
-const MainPage = (props) => {
+const getSortedOffers = (offers, sortType) => {
+  let sortedOffers;
+
+  switch (sortType) {
+    case SortType.POPULAR:
+      sortedOffers = offers.slice();
+      break;
+    case SortType.PRICE_LOW_TO_HIGH:
+      sortedOffers = offers.slice().sort((a, b) => a.price - b.price);
+      break;
+    case SortType.PRICE_HIGH_TO_LOW:
+      sortedOffers = offers.slice().sort((a, b) => b.price - a.price);
+      break;
+    case SortType.TOP_RATED:
+      sortedOffers = offers.slice().sort((a, b) => b.rating - a.rating);
+      break;
+  }
+
+  return sortedOffers;
+};
+
+const findActiveHotelIndex = (offers, offer) => {
+  return offers.findIndex((item) => item.id === offer.id);
+};
+
+const Cities = (props) => {
   const {
     offers,
-    leaflet,
     city,
-    cities,
     sortType,
     activeItem,
+    leaflet,
     renderSorting,
-    onChangeCity,
     onChangeActiveItem,
     onResetActiveItem
   } = props;
 
-  if (!offers.length || !city) {
-    return null;
+  if (!offers.length) {
+    return (
+      <CitiesWrapper offers={offers.length}>
+        <MainPageEmpty />
+      </CitiesWrapper>
+    );
   }
+  const cityCoords = offers[0].city.location;
+  const hotels = offers.map((offer) => offer.location);
+  const classNames = [`cities__places-list`, `places__list`, `tabs__content`];
 
-  const filteredOffers = offers.filter((offer) => offer.city.name === city);
+  const sortedOffers = getSortedOffers(offers, sortType);
 
   return (
-    <Page mods={[`gray`, `main`]}>
-      <main className={
-        `page__main page__main--index ${!filteredOffers.length ? `page__main--index-empty` : `` }`
-      }>
-        <h1 className="visually-hidden">Cities</h1>
-        <CitiesList cities={cities} city={city} onChangeCity={onChangeCity} />
-        <Cities
-          offers={filteredOffers}
-          activeItem={activeItem}
-          city={city}
-          sortType={sortType}
-          leaflet={leaflet}
-          renderSorting={renderSorting}
-          onChangeActiveItem={onChangeActiveItem}
-          onResetActiveItem={onResetActiveItem}
+    <CitiesWrapper offers={offers.length}>
+      <section className="cities__places places">
+        <h2 className="visually-hidden">Places</h2>
+        <b className="places__found">{offers.length} place{offers.length > 1 ? `s` : ``} to stay in {city}</b>
+
+        {renderSorting()}
+
+        <HotelCardsList
+          offers={sortedOffers}
+          classNames={classNames}
+          onActiveHotel={onChangeActiveItem}
+          onDisactiveHotel={onResetActiveItem}
         />
-      </main>
-    </Page>
+
+      </section>
+      <div className="cities__right-section">
+        <section className="cities__map map" style={{background: `none`}}>
+          <Map
+            coords={{city: cityCoords, hotels}}
+            leaflet={leaflet}
+            city={city}
+            activeHotel={findActiveHotelIndex(offers, activeItem)}
+          />
+        </section>
+      </div>
+    </CitiesWrapper>
   );
 };
 
-MainPage.propTypes = {
+Cities.propTypes = {
   sortType: PropTypes.oneOf(Object.values(SortType)).isRequired,
-  cities: PropTypes.arrayOf(PropTypes.string).isRequired,
   city: PropTypes.string.isRequired,
   leaflet: PropTypes.object.isRequired,
   activeItem: PropTypes.shape({
@@ -119,10 +157,9 @@ MainPage.propTypes = {
           zoom: PropTypes.number.isRequired
         }).isRequired
       })).isRequired,
-  onChangeCity: PropTypes.func.isRequired,
   renderSorting: PropTypes.func.isRequired,
   onChangeActiveItem: PropTypes.func.isRequired,
   onResetActiveItem: PropTypes.func.isRequired
 };
 
-export default MainPage;
+export default Cities;

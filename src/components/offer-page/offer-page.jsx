@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReviewsList from '../reviews-list/reviews-list.jsx';
 import Map from '../map/map.jsx';
 import HotelCardsList from '../hotel-cards-list/hotel-cards-list.jsx';
-import Header from '../header/header.jsx';
+import Page from '../page/page.jsx';
 import {MAX_RATING} from '../../constants';
 import {findDistance} from '../../utils';
 
@@ -52,9 +52,7 @@ class OfferPage extends PureComponent {
     const classNames = [`near-places__list`, `places__list`];
 
     return (
-      <div className="page">
-        <Header />
-
+      <Page>
         <main className="page__main page__main--property">
           <section className="property">
             <div className="property__gallery-container container">
@@ -209,7 +207,7 @@ class OfferPage extends PureComponent {
             </section>
           </div>
         </main>
-      </div>
+      </Page>
     );
   }
 
