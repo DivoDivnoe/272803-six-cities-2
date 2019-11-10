@@ -40,11 +40,9 @@ class App extends PureComponent {
     const {leaflet, reviews, city, cities, onChangeCity} = this.props;
 
     if (pathname === `/`) {
-      const filteredOffers = this.props.offers.filter((offer) => offer.city.name === city);
-
       return (
         <MainPageWithState
-          offers={filteredOffers}
+          offers={offers}
           leaflet={leaflet}
           city={city}
           cities={cities}

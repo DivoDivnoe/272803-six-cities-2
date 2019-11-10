@@ -1,13 +1,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import OfferPage from './offer-page.jsx';
+import Cities from './cities.jsx';
 
-jest.mock(`../reviews-list/reviews-list.jsx`, () => jest.fn().mockReturnValue(null));
+jest.mock(`../hotel-cards-list/hotel-cards-list.jsx`, () => jest.fn().mockReturnValue(null));
 jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
 
-describe(`OfferPage component`, () => {
+describe(`Cities component`, () => {
   it(`is rendered correctly`, () => {
-    const id = 1;
     const offers = [
       {
         id: 1,
@@ -43,34 +42,27 @@ describe(`OfferPage component`, () => {
         }
       }];
 
-    const reviews = [
-      {
-        id: 1,
-        user: {
-          id: 1,
-          isPro: true,
-          name: `Trump`,
-          avatarUrl: `some/src`
-        },
-        rating: 1,
-        comment: `some comment`,
-        date: `2019-05-08T14:13:56.569Z`
-      }];
+    const sortType = `POPULAR`;
+    const city = `somecity`;
     const leaflet = jest.genMockFromModule(`leaflet`);
+    const renderSorting = jest.fn();
     const onChangeActiveItem = jest.fn();
     const onResetActiveItem = jest.fn();
 
-    const tree = renderer.create(
-        <OfferPage
-          id={id}
-          offers={offers}
-          activeItem={offers[0]}
-          reviews={reviews}
-          leaflet={leaflet}
-          onChangeActiveItem={onChangeActiveItem}
-          onResetActiveItem={onResetActiveItem}
-        />
-    );
+    const tree = renderer
+      .create(
+          <Cities
+            offers={offers}
+            city={city}
+            sortType={sortType}
+            activeItem={offers[0]}
+            leaflet={leaflet}
+            renderSorting={renderSorting}
+            onChangeActiveItem={onChangeActiveItem}
+            onResetActiveItem={onResetActiveItem}
+          />
+      )
+      .toJSON();
 
     expect(tree).toMatchSnapshot();
   });
