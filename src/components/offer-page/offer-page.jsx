@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import ReviewsList from '../reviews-list/reviews-list.jsx';
 import Map from '../map/map.jsx';
 import HotelCardsList from '../hotel-cards-list/hotel-cards-list.jsx';
-import {MAX_RATING, DEFAULT_ACTIVE_HOTEL_INDEX} from '../../constants';
+import Header from '../header/header.jsx';
+import {MAX_RATING} from '../../constants';
 import {findDistance} from '../../utils';
 
 const CLOSEST_HOTELS_AMOUNT = 3;
@@ -12,45 +13,39 @@ class OfferPage extends PureComponent {
   constructor(props) {
     super(props);
 
-    const {offers, id} = this.props;
-    const currentOffer = offers.find((offer) => offer.id === id);
-
-    const closest = OfferPage.findClosestHotels(
-        offers.filter((offer) => offer.id !== id && offer.city.name === currentOffer.city.name),
-        CLOSEST_HOTELS_AMOUNT,
-        currentOffer.location
-    );
-    this.currentOffer = currentOffer;
-
-    this.state = {
-      closest,
-      activeHotel: DEFAULT_ACTIVE_HOTEL_INDEX
-    };
-
-    this.handleActiveHotel = this.handleActiveHotel.bind(this);
-    this.handleDisactiveHotel = this.handleDisactiveHotel.bind(this);
+    this._setCurrentOfferAndHotels();
   }
 
-  static findClosestHotels(offers, amount, location) {
-    const {latitude, longitude} = location;
+  componentDidUpdate(prevProps) {
+    const {id} = this.props;
 
-    return offers.slice()
-      .sort((prev, next) => {
-        const {longitude: prevLongitude, latitude: prevLatitude} = prev.location;
-        const prevLocation = {latitude: prevLatitude, longitude: prevLongitude};
-        const prevDistance = findDistance({latitude, longitude}, prevLocation);
+    if (prevProps.id !== id) {
+      this._setCurrentOfferAndHotels();
+    }
+  }
 
-        const {longitude: nextLongitude, latitude: nextLatitude} = next.location;
-        const nextLocation = {latitude: nextLatitude, longitude: nextLongitude};
-        const nextDistance = findDistance({latitude, longitude}, nextLocation);
+  _setCurrentOfferAndHotels() {
+    const {offers, id} = this.props;
 
-        return prevDistance - nextDistance;
-      })
-      .slice(0, amount);
+    this.currentOffer = offers.find((offer) => offer.id === id);
+    this.closest = OfferPage.findClosestHotels(
+        offers.filter((offer) => offer.id !== id && offer.city.name === this.currentOffer.city.name),
+        CLOSEST_HOTELS_AMOUNT,
+        this.currentOffer.location
+    );
   }
 
   render() {
-    const {offers, reviews, id, leaflet} = this.props;
+    const {
+      offers,
+      reviews,
+      id,
+      leaflet,
+      activeItem,
+      onChangeActiveItem,
+      onResetActiveItem
+    } = this.props;
+    const {currentOffer} = this;
     const data = offers.find((offer) => offer.id === id);
     const {type, title, description, price, rating, images, goods, bedrooms, maxAdults, isPremium, host, city} = data;
     const ratingStarsWidth = rating * 100 / MAX_RATING;
@@ -58,28 +53,7 @@ class OfferPage extends PureComponent {
 
     return (
       <div className="page">
-        <header className="header">
-          <div className="container">
-            <div className="header__wrapper">
-              <div className="header__left">
-                <a className="header__logo-link" href="main.html">
-                  <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41" />
-                </a>
-              </div>
-              <nav className="header__nav">
-                <ul className="header__nav-list">
-                  <li className="header__nav-item user">
-                    <a className="header__nav-link header__nav-link--profile" href="#">
-                      <div className="header__avatar-wrapper user__avatar-wrapper">
-                      </div>
-                      <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </header>
+        <Header />
 
         <main className="page__main page__main--property">
           <section className="property">
@@ -216,10 +190,10 @@ class OfferPage extends PureComponent {
             </div>
             <section className="property__map map">
               <Map
-                coords={{city: city.location, hotels: this.state.closest.map((item) => item.location)}}
+                coords={{city: city.location, hotels: this.closest.map((item) => item.location)}}
                 leaflet={leaflet}
-                activeHotel={this.state.activeHotel}
-                city={this.currentOffer.city.name}
+                activeHotel={OfferPage.findActiveHotelIndex(this.closest, activeItem)}
+                city={currentOffer.city.name}
               />
             </section>
           </section>
@@ -227,10 +201,10 @@ class OfferPage extends PureComponent {
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               {<HotelCardsList
-                offers={this.state.closest}
+                offers={this.closest}
                 classNames={classNames}
-                onActiveHotel={this.handleActiveHotel}
-                onDisactiveHotel={this.handleDisactiveHotel}
+                onActiveHotel={onChangeActiveItem}
+                onDisactiveHotel={onResetActiveItem}
               />}
             </section>
           </div>
@@ -239,14 +213,26 @@ class OfferPage extends PureComponent {
     );
   }
 
-  handleActiveHotel(offer) {
-    const index = this.state.closest.findIndex((item) => item.id === offer.id);
+  static findClosestHotels(offers, amount, location) {
+    const {latitude, longitude} = location;
 
-    this.setState({activeHotel: index});
+    return offers.slice()
+      .sort((prev, next) => {
+        const {longitude: prevLongitude, latitude: prevLatitude} = prev.location;
+        const prevLocation = {latitude: prevLatitude, longitude: prevLongitude};
+        const prevDistance = findDistance({latitude, longitude}, prevLocation);
+
+        const {longitude: nextLongitude, latitude: nextLatitude} = next.location;
+        const nextLocation = {latitude: nextLatitude, longitude: nextLongitude};
+        const nextDistance = findDistance({latitude, longitude}, nextLocation);
+
+        return prevDistance - nextDistance;
+      })
+      .slice(0, amount);
   }
 
-  handleDisactiveHotel() {
-    this.setState({activeHotel: DEFAULT_ACTIVE_HOTEL_INDEX});
+  static findActiveHotelIndex(offers, offer) {
+    return offers.findIndex((item) => item.id === offer.id);
   }
 }
 
@@ -287,6 +273,39 @@ OfferPage.propTypes = {
           zoom: PropTypes.number.isRequired
         }).isRequired
       })).isRequired,
+  activeItem: PropTypes.shape({
+    id: PropTypes.number,
+    city: PropTypes.exact({
+      name: PropTypes.string.isRequired,
+      location: PropTypes.exact({
+        latitude: PropTypes.number.isRequired,
+        longitude: PropTypes.number.isRequired,
+        zoom: PropTypes.number.isRequired
+      }).isRequired
+    }),
+    type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
+    price: PropTypes.number,
+    rating: PropTypes.number,
+    picture: PropTypes.string,
+    images: PropTypes.arrayOf(PropTypes.string),
+    title: PropTypes.string,
+    goods: PropTypes.arrayOf(PropTypes.string),
+    bedrooms: PropTypes.number,
+    maxAdults: PropTypes.number,
+    description: PropTypes.string,
+    isPremium: PropTypes.bool,
+    host: PropTypes.exact({
+      id: PropTypes.number.isRequired,
+      isPro: PropTypes.bool.isRequired,
+      name: PropTypes.string.isRequired,
+      avatarUrl: PropTypes.string.isRequired
+    }),
+    location: PropTypes.exact({
+      latitude: PropTypes.number.isRequired,
+      longitude: PropTypes.number.isRequired,
+      zoom: PropTypes.number.isRequired
+    })
+  }).isRequired,
   reviews: PropTypes.arrayOf(PropTypes.exact({
     id: PropTypes.number.isRequired,
     user: PropTypes.exact({
@@ -299,6 +318,8 @@ OfferPage.propTypes = {
     comment: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   })).isRequired,
+  onChangeActiveItem: PropTypes.func.isRequired,
+  onResetActiveItem: PropTypes.func.isRequired
 };
 
 export default OfferPage;

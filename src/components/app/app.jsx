@@ -6,6 +6,12 @@ import OfferPage from '../offer-page/offer-page.jsx';
 import {offers} from '../../mocks/offers';
 import {ActionCreator, getCitiesListFromOffers} from '../../reducer/reducer';
 
+import withSortType from '../../hocs/with-sort-type/with-sort-type';
+import withActiveItem from '../../hocs/with-active-item/with-active-item';
+
+const MainPageWithState = withActiveItem(withSortType(MainPage));
+const OfferPageWithActiveItem = withActiveItem(OfferPage);
+
 class App extends PureComponent {
   constructor(props) {
     super(props);
@@ -37,7 +43,7 @@ class App extends PureComponent {
       const filteredOffers = this.props.offers.filter((offer) => offer.city.name === city);
 
       return (
-        <MainPage
+        <MainPageWithState
           offers={filteredOffers}
           leaflet={leaflet}
           city={city}
@@ -49,7 +55,15 @@ class App extends PureComponent {
     const [path, id] = pathname.slice(1).split(`/`);
 
     if (path === `offer`) {
-      return <OfferPage offers={offers} leaflet={leaflet} reviews={reviews} id={+id} city={city} />;
+      return (
+        <OfferPageWithActiveItem
+          offers={offers}
+          leaflet={leaflet}
+          reviews={reviews}
+          id={+id}
+          city={city}
+        />
+      );
     }
 
     return null;

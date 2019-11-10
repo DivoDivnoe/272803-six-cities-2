@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import OfferPage from './offer-page.jsx';
 
+jest.mock(`../header/header.jsx`, () => jest.fn().mockReturnValue(null));
 jest.mock(`../reviews-list/reviews-list.jsx`, () => jest.fn().mockReturnValue(null));
 jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
 
@@ -57,13 +58,18 @@ describe(`OfferPage component`, () => {
         date: `2019-05-08T14:13:56.569Z`
       }];
     const leaflet = jest.genMockFromModule(`leaflet`);
+    const onChangeActiveItem = jest.fn();
+    const onResetActiveItem = jest.fn();
 
     const tree = renderer.create(
         <OfferPage
           id={id}
           offers={offers}
+          activeItem={offers[0]}
           reviews={reviews}
           leaflet={leaflet}
+          onChangeActiveItem={onChangeActiveItem}
+          onResetActiveItem={onResetActiveItem}
         />
     );
 

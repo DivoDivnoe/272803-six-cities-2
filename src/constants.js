@@ -1,5 +1,4 @@
 const MAX_RATING = 5;
-const DEFAULT_ACTIVE_HOTEL_INDEX = -1;
 
 const HousingType = {
   APPARTMENT: `appartment`,
@@ -24,7 +23,6 @@ const SortTypeText = {
 
 export {
   MAX_RATING,
-  DEFAULT_ACTIVE_HOTEL_INDEX,
   HousingType,
   SortType,
   SortTypeText

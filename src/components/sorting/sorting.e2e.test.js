@@ -8,21 +8,25 @@ Enzyme.configure({adapter: new Adapter()});
 describe(`Sorting component`, () => {
   it(`changes sorting type correctly`, () => {
     const sortType = `TOP_RATED`;
+    const isOpened = true;
     const onChangeSortType = jest.fn();
+    const onToggle = jest.fn();
 
     const sorting = shallow(
         <Sorting
+          isOpened={isOpened}
           sortType={sortType}
           onChangeSortType={onChangeSortType}
+          onToggle={onToggle}
         />
     );
 
     sorting.find(`.places__sorting-type`).simulate(`click`);
-    expect(sorting.state(`isOpened`)).toEqual(true);
+    expect(onToggle).toHaveBeenCalledTimes(1);
 
     sorting.find(`li`).first().simulate(`click`);
     expect(onChangeSortType).toHaveBeenCalledTimes(1);
+    expect(onToggle).toHaveBeenCalledTimes(2);
     expect(onChangeSortType).toHaveBeenCalledWith(`POPULAR`);
-    expect(sorting.state(`isOpened`)).toEqual(false);
   });
 });
