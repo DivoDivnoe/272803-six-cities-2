@@ -9,7 +9,7 @@ const HouseType = {
   HOTEL: `hotel`
 };
 
-const houseTypeMap = {
+const HouseTypeMap = {
   [HouseType.APARTMENT]: `Apartment`,
   [HouseType.ROOM]: `Private Room`,
   [HouseType.HOUSE]: `House`,
@@ -19,7 +19,6 @@ const houseTypeMap = {
 const HotelCard = (props) => {
   const {data, onMouseEnter, onMouseLeave} = props;
   const {price, type, rating, picture, title, isPremium, id} = data;
-
   const starsWidth = rating * 100 / MAX_RATING;
 
   return (
@@ -61,7 +60,7 @@ const HotelCard = (props) => {
           <a href="#">{title}</a>
         </h2>
 
-        <p className="place-card__type">{houseTypeMap[type]}</p>
+        <p className="place-card__type">{HouseTypeMap[type]}</p>
       </div>
     </article>
   );

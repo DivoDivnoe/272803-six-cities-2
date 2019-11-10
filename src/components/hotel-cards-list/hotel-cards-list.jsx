@@ -1,39 +1,23 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import HotelCard from '../hotel-card/hotel-card.jsx';
 
-class HotelCardsList extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
+const HotelCardsList = (props) => {
+  const {offers, classNames, onActiveHotel, onDisactiveHotel} = props;
 
-  render() {
-    const {offers, classNames, onActiveHotel, onDisactiveHotel} = this.props;
-
-    return (
-      <div className={classNames.join(` `)}>
-        {offers.map((data, index) => (
-          <HotelCard
-            data={data}
-            onMouseEnter={onActiveHotel}
-            onMouseLeave={onDisactiveHotel}
-            key={`card-${index}`}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  mouseEnterHandler(card) {
-    this.setState({
-      currentCard: card
-    });
-  }
-
-  mouseLeaveHandler() {
-    this.setState({currentCard: null});
-  }
-}
+  return (
+    <div className={classNames.join(` `)}>
+      {offers.map((data, index) => (
+        <HotelCard
+          data={data}
+          onMouseEnter={onActiveHotel}
+          onMouseLeave={onDisactiveHotel}
+          key={`card-${index}`}
+        />
+      ))}
+    </div>
+  );
+};
 
 HotelCardsList.propTypes = {
   classNames: PropTypes.arrayOf(

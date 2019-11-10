@@ -2,6 +2,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import MainPage from './main-page.jsx';
 
+jest.mock(`../header/header.jsx`, () => jest.fn().mockReturnValue(null));
 jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
 jest.mock(`../hotel-cards-list/hotel-cards-list.jsx`, () => jest.fn().mockReturnValue(null));
 jest.mock(`../cities-list/cities-list.jsx`, () => jest.fn().mockReturnValue(null));
@@ -48,16 +49,25 @@ describe(`MainPage component`, () => {
     const leaflet = jest.genMockFromModule(`leaflet`);
     const city = `somecity`;
     const cities = [`somecity`];
+    const sortType = `POPULAR`;
     const onChangeCity = jest.fn();
+    const renderSorting = jest.fn();
+    const onChangeActiveItem = jest.fn();
+    const onResetActiveItem = jest.fn();
 
     const tree = renderer
       .create(
           <MainPage
+            sortType={sortType}
             offers={offers}
+            activeItem={offers[0]}
             leaflet={leaflet}
             cities={cities}
             city={city}
             onChangeCity={onChangeCity}
+            renderSorting={renderSorting}
+            onChangeActiveItem={onChangeActiveItem}
+            onResetActiveItem={onResetActiveItem}
           />
       )
       .toJSON();
