@@ -1,16 +1,8 @@
-import {reducer, ActionCreator, ActionType, getFilteredOffers} from './reducer';
+import {reducer, ActionCreator, getFilteredOffers} from './data';
+import {getCitiesListFromOffers} from './selectors';
+import {ActionType} from '../../constants';
 
 describe(`Actions creator returns right action`, () => {
-  it(`for changing current city`, () => {
-    const city = `Gatchina`;
-    const action = ActionCreator.changeCity(city);
-
-    expect(action).toEqual({
-      type: ActionType.CHANGE_CITY,
-      payload: city
-    });
-  });
-
   it(`for changing offers`, () => {
     const offers = [
       {
@@ -40,26 +32,6 @@ describe(`Actions creator returns right action`, () => {
 });
 
 describe(`reducer returns right state`, () => {
-  it(`with changing city action`, () => {
-    const city = `Gatchina`;
-    const state = {
-      city: `Paris`,
-      offers: [],
-      cities: []
-    };
-    const action = {
-      type: ActionType.CHANGE_CITY,
-      payload: city
-    };
-
-    expect(reducer(state, action)).toEqual({
-      city: `Gatchina`,
-      offers: [],
-      cities: []
-    });
-  });
-
-
   it(`with changing offers action`, () => {
     const offers = [
       {
@@ -169,6 +141,42 @@ describe(`getFilteredOffers function`, () => {
             }
           }
         ]
+    );
+  });
+});
+
+describe(`getCitiesListFromOffers function`, () => {
+  it(`returns correctly filtered array`, () => {
+    const city = `Gatchina`;
+    const offers = [
+      {
+        id: 1,
+        city: {
+          name: `Gatchina`
+        }
+      },
+      {
+        id: 2,
+        city: {
+          name: `Moscow`
+        }
+      },
+      {
+        id: 3,
+        city: {
+          name: `Gatchina`
+        }
+      },
+      {
+        id: 4,
+        city: {
+          name: `Paris`
+        }
+      }
+    ];
+
+    expect(getCitiesListFromOffers(offers, city)).toEqual(
+        [`Gatchina`, `Moscow`, `Paris`]
     );
   });
 });

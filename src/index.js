@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 import App from './components/app/app.jsx';
 import {reviews} from './mocks/reviews';
 import leaflet from 'leaflet';
-import {reducer} from './reducer/reducer';
+import reducer from './reducer/index';
 
 const store = createStore(
     reducer,

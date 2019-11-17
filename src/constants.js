@@ -21,9 +21,16 @@ const SortTypeText = {
   [SortType.TOP_RATED]: `Top rated first`
 };
 
+const ActionType = {
+  CHANGE_CITY: `CHANGE_CITY`,
+  SET_OFFERS: `SET_OFFERS`,
+  SET_CITIES: `SET_CITIES`
+};
+
 export {
   MAX_RATING,
   HousingType,
   SortType,
-  SortTypeText
+  SortTypeText,
+  ActionType
 };

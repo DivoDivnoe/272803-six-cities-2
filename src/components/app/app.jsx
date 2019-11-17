@@ -4,7 +4,11 @@ import {connect} from 'react-redux';
 import MainPage from '../main-page/main-page.jsx';
 import OfferPage from '../offer-page/offer-page.jsx';
 import {offers} from '../../mocks/offers';
-import {ActionCreator, getCitiesListFromOffers} from '../../reducer/reducer';
+
+import {ActionCreator as DataActionCreator} from '../../reducer/data/data';
+import {getCities, getOffers} from '../../reducer/data/selectors';
+import {ActionCreator as AppActionCreator} from '../../reducer/application/application';
+import {getCity} from '../../reducer/application/selectors';
 
 import withSortType from '../../hocs/with-sort-type/with-sort-type';
 import withActiveItem from '../../hocs/with-active-item/with-active-item';
@@ -24,12 +28,6 @@ class App extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.offers.length !== this.props.offers.length) {
-      const cities = getCitiesListFromOffers(this.props.offers);
-
-      this.props.setCities(cities);
-    }
-
     if (this.props.cities.length !== prevProps.cities.length) {
       this.props.onChangeCity(this.props.cities[0]);
     }
@@ -124,14 +122,14 @@ App.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  city: state.city,
-  offers: state.offers,
-  cities: state.cities
+  city: getCity(state),
+  offers: getOffers(state),
+  cities: getCities(state)
 });
 const mapDispatchToProps = (dispatch) => ({
-  setOffers: (items) => dispatch(ActionCreator.setOffers(items)),
-  onChangeCity: (city) => dispatch(ActionCreator.changeCity(city)),
-  setCities: (items) => dispatch(ActionCreator.setCities(items)),
+  setOffers: (items) => dispatch(DataActionCreator.setOffers(items)),
+  onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city)),
+  setCities: (items) => dispatch(DataActionCreator.setCities(items)),
 });
 
 export {App};
