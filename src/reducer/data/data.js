@@ -19,8 +19,6 @@ const Operation = {
         if (response.status === StatusCode.OK) {
           const offers = response.data.map((offer) => transformObjSnakeToCamel(offer));
 
-          console.log(offers);
-
           dispatch(ActionCreator.setOffers(offers));
         }
       });
@@ -33,7 +31,6 @@ const ActionCreator = {
     payload: items
   })
 };
-
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {

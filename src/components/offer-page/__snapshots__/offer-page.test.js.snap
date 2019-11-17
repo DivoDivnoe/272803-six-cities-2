@@ -223,7 +223,7 @@ exports[`OfferPage component is rendered correctly 1`] = `
                   alt="Host avatar"
                   className="property__avatar user__avatar"
                   height="74"
-                  src="some/src"
+                  src="/some/src"
                   width="74"
                 />
               </div>

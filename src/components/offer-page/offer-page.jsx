@@ -10,31 +10,6 @@ import {findDistance} from '../../utils';
 const CLOSEST_HOTELS_AMOUNT = 3;
 
 class OfferPage extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this._setCurrentOfferAndHotels();
-  }
-
-  componentDidUpdate(prevProps) {
-    const {id} = this.props;
-
-    if (prevProps.id !== id) {
-      this._setCurrentOfferAndHotels();
-    }
-  }
-
-  _setCurrentOfferAndHotels() {
-    const {offers, id} = this.props;
-
-    this.currentOffer = offers.find((offer) => offer.id === id);
-    this.closest = OfferPage.findClosestHotels(
-        offers.filter((offer) => offer.id !== id && offer.city.name === this.currentOffer.city.name),
-        CLOSEST_HOTELS_AMOUNT,
-        this.currentOffer.location
-    );
-  }
-
   render() {
     const {
       offers,
@@ -45,9 +20,19 @@ class OfferPage extends PureComponent {
       onChangeActiveItem,
       onResetActiveItem
     } = this.props;
-    const {currentOffer} = this;
-    const data = offers.find((offer) => offer.id === id);
-    const {type, title, description, price, rating, images, goods, bedrooms, maxAdults, isPremium, host, city} = data;
+
+    if (!offers.length) {
+      return null;
+    }
+
+    const currentOffer = offers.find((offer) => offer.id === id);
+    const closest = OfferPage.findClosestHotels(
+        offers.filter((offer) => offer.id !== id && offer.city.name === currentOffer.city.name),
+        CLOSEST_HOTELS_AMOUNT,
+        currentOffer.location
+    );
+
+    const {type, title, description, price, rating, images, goods, bedrooms, maxAdults, isPremium, host, city} = currentOffer;
     const ratingStarsWidth = rating * 100 / MAX_RATING;
     const classNames = [`near-places__list`, `places__list`];
 
@@ -118,7 +103,7 @@ class OfferPage extends PureComponent {
                   <h2 className="property__host-title">Meet the host</h2>
                   <div className="property__host-user user">
                     <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                      <img className="property__avatar user__avatar" src={host.avatarUrl} width="74" height="74" alt="Host avatar" />
+                      <img className="property__avatar user__avatar" src={`/${host.avatarUrl}`} width="74" height="74" alt="Host avatar" />
                     </div>
                     <span className="property__user-name">
                       {host.name}
@@ -188,9 +173,9 @@ class OfferPage extends PureComponent {
             </div>
             <section className="property__map map">
               <Map
-                coords={{city: city.location, hotels: this.closest.map((item) => item.location)}}
+                coords={{city: city.location, hotels: closest.map((item) => item.location)}}
                 leaflet={leaflet}
-                activeHotel={OfferPage.findActiveHotelIndex(this.closest, activeItem)}
+                activeHotel={OfferPage.findActiveHotelIndex(closest, activeItem)}
                 city={currentOffer.city.name}
               />
             </section>
@@ -199,7 +184,7 @@ class OfferPage extends PureComponent {
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               {<HotelCardsList
-                offers={this.closest}
+                offers={closest}
                 classNames={classNames}
                 onActiveHotel={onChangeActiveItem}
                 onDisactiveHotel={onResetActiveItem}

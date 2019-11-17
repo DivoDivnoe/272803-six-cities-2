@@ -26,6 +26,10 @@ const transformObjSnakeToCamel = (obj) => {
   }, {});
 };
 
+const getRandomNumber = (max, min = 0) => {
+  return min + Math.floor(Math.random() * (max - min));
+};
+
 const parseDateString = (dateStr) => {
   const date = new Date(dateStr);
 
@@ -45,5 +49,6 @@ const findDistance = (coords1, coords2) => {
 export {
   parseDateString,
   findDistance,
-  transformObjSnakeToCamel
+  transformObjSnakeToCamel,
+  getRandomNumber
 };

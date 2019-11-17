@@ -12,25 +12,22 @@ import {getCity} from '../../reducer/application/selectors';
 import withSortType from '../../hocs/with-sort-type/with-sort-type';
 import withActiveItem from '../../hocs/with-active-item/with-active-item';
 
+import {getRandomNumber} from '../../utils';
+
 const MainPageWithState = withActiveItem(withSortType(MainPage));
 const OfferPageWithActiveItem = withActiveItem(OfferPage);
 
 class App extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return this._getPageScreen();
-  }
-
   componentDidMount() {
     this.props.loadOffers();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.cities.length !== prevProps.cities.length) {
-      this.props.onChangeCity(this.props.cities[0]);
+      const {cities} = this.props;
+      const index = getRandomNumber(cities.length);
+
+      this.props.onChangeCity(this.props.cities[index]);
     }
   }
 
@@ -58,12 +55,15 @@ class App extends PureComponent {
           leaflet={leaflet}
           reviews={reviews}
           id={+id}
-          city={city}
         />
       );
     }
 
     return null;
+  }
+
+  render() {
+    return this._getPageScreen();
   }
 }
 
