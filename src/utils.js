@@ -1,3 +1,31 @@
+const SNAKE_STYLE_DIVIDER = `_`;
+
+const capitalizeStr = (str) => `${str[0].toUpperCase()}${str.slice(1)}`;
+
+const transformSnakeToCamelCase = (str) => {
+  const splitStr = str.split(SNAKE_STYLE_DIVIDER);
+
+  return splitStr.slice(1).reduce((acc, cur) => acc + capitalizeStr(cur), splitStr[0]);
+};
+
+const isObject = (obj) => {
+  return typeof obj === `object` && !Array.isArray(obj) && obj !== null;
+};
+
+const transformObjSnakeToCamel = (obj) => {
+  return Object.keys(obj).reduce((acc, cur) => {
+    const currentItem = obj[cur];
+
+    if (isObject(currentItem)) {
+      obj[cur] = transformObjSnakeToCamel(currentItem);
+    }
+
+    acc[transformSnakeToCamelCase(cur)] = obj[cur];
+
+    return acc;
+  }, {});
+};
+
 const parseDateString = (dateStr) => {
   const date = new Date(dateStr);
 
@@ -16,5 +44,6 @@ const findDistance = (coords1, coords2) => {
 
 export {
   parseDateString,
-  findDistance
+  findDistance,
+  transformObjSnakeToCamel
 };

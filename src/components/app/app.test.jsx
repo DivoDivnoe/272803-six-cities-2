@@ -23,7 +23,7 @@ describe(`App component`, () => {
         type: `apartment`,
         price: 0,
         rating: 0,
-        picture: `some/src`,
+        previewImage: `some/src`,
         images: [`some/src`],
         title: `some title`,
         goods: [`first`, `second`],
@@ -31,6 +31,7 @@ describe(`App component`, () => {
         maxAdults: 0,
         description: `some desc.`,
         isPremium: true,
+        isFavorite: true,
         host: {
           id: 1,
           isPro: true,
@@ -65,6 +66,7 @@ describe(`App component`, () => {
     const setOffers = jest.fn();
     const onChangeCity = jest.fn();
     const setCities = jest.fn();
+    const loadOffers = jest.fn();
 
     const tree = renderer.create(
         <App
@@ -76,6 +78,7 @@ describe(`App component`, () => {
           setOffers={setOffers}
           onChangeCity={onChangeCity}
           setCities={setCities}
+          loadOffers={loadOffers}
         />
     );
 

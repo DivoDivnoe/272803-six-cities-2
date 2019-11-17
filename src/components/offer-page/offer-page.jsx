@@ -251,7 +251,7 @@ OfferPage.propTypes = {
         type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
         price: PropTypes.number.isRequired,
         rating: PropTypes.number.isRequired,
-        picture: PropTypes.string.isRequired,
+        previewImage: PropTypes.string.isRequired,
         images: PropTypes.arrayOf(PropTypes.string).isRequired,
         title: PropTypes.string.isRequired,
         goods: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -259,6 +259,7 @@ OfferPage.propTypes = {
         maxAdults: PropTypes.number.isRequired,
         description: PropTypes.string.isRequired,
         isPremium: PropTypes.bool.isRequired,
+        isFavorite: PropTypes.bool.isRequired,
         host: PropTypes.exact({
           id: PropTypes.number.isRequired,
           isPro: PropTypes.bool.isRequired,
@@ -284,7 +285,7 @@ OfferPage.propTypes = {
     type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
     price: PropTypes.number,
     rating: PropTypes.number,
-    picture: PropTypes.string,
+    previewImage: PropTypes.string,
     images: PropTypes.arrayOf(PropTypes.string),
     title: PropTypes.string,
     goods: PropTypes.arrayOf(PropTypes.string),
@@ -292,6 +293,7 @@ OfferPage.propTypes = {
     maxAdults: PropTypes.number,
     description: PropTypes.string,
     isPremium: PropTypes.bool,
+    isFavorite: PropTypes.bool,
     host: PropTypes.exact({
       id: PropTypes.number.isRequired,
       isPro: PropTypes.bool.isRequired,

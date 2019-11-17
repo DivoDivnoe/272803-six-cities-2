@@ -8,6 +8,7 @@ const getCitiesListFromOffers = (offers) => {
 };
 
 const getOffers = (state) => state[NameSpace.DATA].offers;
+
 const getCities = createSelector(
     getOffers,
     (offers) => getCitiesListFromOffers(offers)

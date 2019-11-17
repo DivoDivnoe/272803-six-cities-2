@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import MainPage from '../main-page/main-page.jsx';
 import OfferPage from '../offer-page/offer-page.jsx';
-import {offers} from '../../mocks/offers';
 
-import {ActionCreator as DataActionCreator} from '../../reducer/data/data';
+import {Operation} from '../../reducer/data/data';
 import {getCities, getOffers} from '../../reducer/data/selectors';
 import {ActionCreator as AppActionCreator} from '../../reducer/application/application';
 import {getCity} from '../../reducer/application/selectors';
@@ -19,12 +18,14 @@ const OfferPageWithActiveItem = withActiveItem(OfferPage);
 class App extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.props.setOffers(offers);
   }
 
   render() {
     return this._getPageScreen();
+  }
+
+  componentDidMount() {
+    this.props.loadOffers();
   }
 
   componentDidUpdate(prevProps) {
@@ -35,7 +36,7 @@ class App extends PureComponent {
 
   _getPageScreen() {
     const {pathname} = location;
-    const {leaflet, reviews, city, cities, onChangeCity} = this.props;
+    const {leaflet, reviews, city, cities, offers, onChangeCity} = this.props;
 
     if (pathname === `/`) {
       return (
@@ -82,7 +83,7 @@ App.propTypes = {
         type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
         price: PropTypes.number.isRequired,
         rating: PropTypes.number.isRequired,
-        picture: PropTypes.string.isRequired,
+        previewImage: PropTypes.string.isRequired,
         images: PropTypes.arrayOf(PropTypes.string).isRequired,
         title: PropTypes.string.isRequired,
         goods: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -90,6 +91,7 @@ App.propTypes = {
         maxAdults: PropTypes.number.isRequired,
         description: PropTypes.string.isRequired,
         isPremium: PropTypes.bool.isRequired,
+        isFavorite: PropTypes.bool.isRequired,
         host: PropTypes.exact({
           id: PropTypes.number.isRequired,
           isPro: PropTypes.bool.isRequired,
@@ -116,9 +118,8 @@ App.propTypes = {
   })).isRequired,
   city: PropTypes.string.isRequired,
   cities: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setOffers: PropTypes.func.isRequired,
-  onChangeCity: PropTypes.func.isRequired,
-  setCities: PropTypes.func.isRequired
+  loadOffers: PropTypes.func.isRequired,
+  onChangeCity: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
@@ -127,9 +128,8 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   cities: getCities(state)
 });
 const mapDispatchToProps = (dispatch) => ({
-  setOffers: (items) => dispatch(DataActionCreator.setOffers(items)),
-  onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city)),
-  setCities: (items) => dispatch(DataActionCreator.setCities(items)),
+  loadOffers: () => dispatch(Operation.loadOffers()),
+  onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city))
 });
 
 export {App};

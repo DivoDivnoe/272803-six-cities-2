@@ -22,7 +22,7 @@ describe(`OfferPage component`, () => {
         type: `apartment`,
         price: 0,
         rating: 0,
-        picture: `some/src`,
+        previewImage: `some/src`,
         images: [`some/src`],
         title: `some title`,
         goods: [`first`, `second`],
@@ -30,6 +30,7 @@ describe(`OfferPage component`, () => {
         maxAdults: 0,
         description: `some desc.`,
         isPremium: true,
+        isFavorite: false,
         host: {
           id: 1,
           isPro: true,

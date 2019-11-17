@@ -1,6 +1,7 @@
 const NameSpace = {
   APPLICATION: `APPLICATION`,
-  DATA: `DATA`
+  DATA: `DATA`,
+  SERVER: `SERVER`
 };
 
 export default NameSpace;

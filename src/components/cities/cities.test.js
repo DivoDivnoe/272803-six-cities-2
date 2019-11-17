@@ -21,7 +21,7 @@ describe(`Cities component`, () => {
         type: `apartment`,
         price: 0,
         rating: 0,
-        picture: `some/src`,
+        previewImage: `some/src`,
         images: [`some/src`],
         title: `some title`,
         goods: [`first`, `second`],
@@ -29,6 +29,7 @@ describe(`Cities component`, () => {
         maxAdults: 0,
         description: `some desc.`,
         isPremium: true,
+        isFavorite: false,
         host: {
           id: 1,
           isPro: true,

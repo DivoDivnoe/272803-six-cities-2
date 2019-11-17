@@ -19,16 +19,6 @@ describe(`Actions creator returns right action`, () => {
       payload: offers
     });
   });
-
-  it(`for setting cities list`, () => {
-    const cities = [`Moscow`, `Berlin`];
-    const action = ActionCreator.setCities(cities);
-
-    expect(action).toEqual({
-      type: ActionType.SET_CITIES,
-      payload: cities
-    });
-  });
 });
 
 describe(`reducer returns right state`, () => {
@@ -55,8 +45,7 @@ describe(`reducer returns right state`, () => {
     ];
     const state = {
       city: ``,
-      offers: [],
-      cities: []
+      offers: []
     };
 
 
@@ -68,30 +57,7 @@ describe(`reducer returns right state`, () => {
 
     expect(reducer(state, action)).toEqual({
       city: ``,
-      offers,
-      cities: []
-    });
-  });
-
-  it(`with setting cities list action`, () => {
-    const cities = [`Moscow`, `Berlin`];
-    const state = {
-      city: ``,
-      offers: [],
-      cities: []
-    };
-
-
-    const action = {
-      type: ActionType.SET_CITIES,
-      payload: cities
-    };
-
-
-    expect(reducer(state, action)).toEqual({
-      city: ``,
-      offers: [],
-      cities
+      offers
     });
   });
 });
