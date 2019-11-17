@@ -1,16 +1,10 @@
-import {reducer, ActionCreator, ActionType, getFilteredOffers} from './reducer';
+import {reducer, ActionCreator, getFilteredOffers, Operation} from './data';
+import {getCitiesListFromOffers} from './selectors';
+import {ActionType} from '../../constants';
+import MockAdapter from 'axios-mock-adapter';
+import createApi from '../../api.js';
 
 describe(`Actions creator returns right action`, () => {
-  it(`for changing current city`, () => {
-    const city = `Gatchina`;
-    const action = ActionCreator.changeCity(city);
-
-    expect(action).toEqual({
-      type: ActionType.CHANGE_CITY,
-      payload: city
-    });
-  });
-
   it(`for changing offers`, () => {
     const offers = [
       {
@@ -27,39 +21,9 @@ describe(`Actions creator returns right action`, () => {
       payload: offers
     });
   });
-
-  it(`for setting cities list`, () => {
-    const cities = [`Moscow`, `Berlin`];
-    const action = ActionCreator.setCities(cities);
-
-    expect(action).toEqual({
-      type: ActionType.SET_CITIES,
-      payload: cities
-    });
-  });
 });
 
 describe(`reducer returns right state`, () => {
-  it(`with changing city action`, () => {
-    const city = `Gatchina`;
-    const state = {
-      city: `Paris`,
-      offers: [],
-      cities: []
-    };
-    const action = {
-      type: ActionType.CHANGE_CITY,
-      payload: city
-    };
-
-    expect(reducer(state, action)).toEqual({
-      city: `Gatchina`,
-      offers: [],
-      cities: []
-    });
-  });
-
-
   it(`with changing offers action`, () => {
     const offers = [
       {
@@ -83,8 +47,7 @@ describe(`reducer returns right state`, () => {
     ];
     const state = {
       city: ``,
-      offers: [],
-      cities: []
+      offers: []
     };
 
 
@@ -96,30 +59,7 @@ describe(`reducer returns right state`, () => {
 
     expect(reducer(state, action)).toEqual({
       city: ``,
-      offers,
-      cities: []
-    });
-  });
-
-  it(`with setting cities list action`, () => {
-    const cities = [`Moscow`, `Berlin`];
-    const state = {
-      city: ``,
-      offers: [],
-      cities: []
-    };
-
-
-    const action = {
-      type: ActionType.SET_CITIES,
-      payload: cities
-    };
-
-
-    expect(reducer(state, action)).toEqual({
-      city: ``,
-      offers: [],
-      cities
+      offers
     });
   });
 });
@@ -170,6 +110,65 @@ describe(`getFilteredOffers function`, () => {
           }
         ]
     );
+  });
+});
+
+describe(`getCitiesListFromOffers function`, () => {
+  it(`returns correctly filtered array`, () => {
+    const city = `Gatchina`;
+    const offers = [
+      {
+        id: 1,
+        city: {
+          name: `Gatchina`
+        }
+      },
+      {
+        id: 2,
+        city: {
+          name: `Moscow`
+        }
+      },
+      {
+        id: 3,
+        city: {
+          name: `Gatchina`
+        }
+      },
+      {
+        id: 4,
+        city: {
+          name: `Paris`
+        }
+      }
+    ];
+
+    expect(getCitiesListFromOffers(offers, city)).toEqual(
+        [`Gatchina`, `Moscow`, `Paris`]
+    );
+  });
+});
+
+describe(`loadOffers function`, () => {
+  it(`makes correct request to /hotels`, () => {
+    const dispatch = jest.fn();
+    const api = createApi(dispatch);
+    const mockApi = new MockAdapter(api);
+
+    const offersLoader = Operation.loadOffers();
+
+    mockApi
+      .onGet(`/hotels`)
+      .reply(200, [{fake: true}]);
+
+    return offersLoader(dispatch, null, api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenCalledWith({
+          type: ActionType.SET_OFFERS,
+          payload: [{fake: true}]
+        });
+      });
   });
 });
 

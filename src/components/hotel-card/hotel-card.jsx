@@ -18,7 +18,7 @@ const HouseTypeMap = {
 
 const HotelCard = (props) => {
   const {data, onMouseEnter, onMouseLeave} = props;
-  const {price, type, rating, picture, title, isPremium, id} = data;
+  const {price, type, rating, previewImage, title, isPremium, id} = data;
   const starsWidth = rating * 100 / MAX_RATING;
 
   return (
@@ -34,7 +34,7 @@ const HotelCard = (props) => {
       )}
       <div className="cities__image-wrapper place-card__image-wrapper">
         <a href={`/offer/${id}`}>
-          <img className="place-card__image" src={picture} width="260" height="200" alt="Place image" />
+          <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
         </a>
       </div>
       <div className="place-card__info">
@@ -80,7 +80,7 @@ HotelCard.propTypes = {
     type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
     price: PropTypes.number.isRequired,
     rating: PropTypes.number.isRequired,
-    picture: PropTypes.string.isRequired,
+    previewImage: PropTypes.string.isRequired,
     images: PropTypes.arrayOf(PropTypes.string).isRequired,
     title: PropTypes.string.isRequired,
     goods: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -88,6 +88,7 @@ HotelCard.propTypes = {
     maxAdults: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
     isPremium: PropTypes.bool.isRequired,
+    isFavorite: PropTypes.bool.isRequired,
     host: PropTypes.exact({
       id: PropTypes.number.isRequired,
       isPro: PropTypes.bool.isRequired,

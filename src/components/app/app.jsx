@@ -3,41 +3,37 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import MainPage from '../main-page/main-page.jsx';
 import OfferPage from '../offer-page/offer-page.jsx';
-import {offers} from '../../mocks/offers';
-import {ActionCreator, getCitiesListFromOffers} from '../../reducer/reducer';
+
+import {Operation} from '../../reducer/data/data';
+import {getCities, getOffers} from '../../reducer/data/selectors';
+import {ActionCreator as AppActionCreator} from '../../reducer/application/application';
+import {getCity} from '../../reducer/application/selectors';
 
 import withSortType from '../../hocs/with-sort-type/with-sort-type';
 import withActiveItem from '../../hocs/with-active-item/with-active-item';
+
+import {getRandomNumber} from '../../utils';
 
 const MainPageWithState = withActiveItem(withSortType(MainPage));
 const OfferPageWithActiveItem = withActiveItem(OfferPage);
 
 class App extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.props.setOffers(offers);
-  }
-
-  render() {
-    return this._getPageScreen();
+  componentDidMount() {
+    this.props.loadOffers();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.offers.length !== this.props.offers.length) {
-      const cities = getCitiesListFromOffers(this.props.offers);
-
-      this.props.setCities(cities);
-    }
-
     if (this.props.cities.length !== prevProps.cities.length) {
-      this.props.onChangeCity(this.props.cities[0]);
+      const {cities} = this.props;
+      const index = getRandomNumber(cities.length);
+
+      this.props.onChangeCity(this.props.cities[index]);
     }
   }
 
   _getPageScreen() {
     const {pathname} = location;
-    const {leaflet, reviews, city, cities, onChangeCity} = this.props;
+    const {leaflet, reviews, city, cities, offers, onChangeCity} = this.props;
 
     if (pathname === `/`) {
       return (
@@ -59,12 +55,15 @@ class App extends PureComponent {
           leaflet={leaflet}
           reviews={reviews}
           id={+id}
-          city={city}
         />
       );
     }
 
     return null;
+  }
+
+  render() {
+    return this._getPageScreen();
   }
 }
 
@@ -84,7 +83,7 @@ App.propTypes = {
         type: PropTypes.oneOf([`apartment`, `room`, `house`, `hotel`]),
         price: PropTypes.number.isRequired,
         rating: PropTypes.number.isRequired,
-        picture: PropTypes.string.isRequired,
+        previewImage: PropTypes.string.isRequired,
         images: PropTypes.arrayOf(PropTypes.string).isRequired,
         title: PropTypes.string.isRequired,
         goods: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -92,6 +91,7 @@ App.propTypes = {
         maxAdults: PropTypes.number.isRequired,
         description: PropTypes.string.isRequired,
         isPremium: PropTypes.bool.isRequired,
+        isFavorite: PropTypes.bool.isRequired,
         host: PropTypes.exact({
           id: PropTypes.number.isRequired,
           isPro: PropTypes.bool.isRequired,
@@ -118,20 +118,18 @@ App.propTypes = {
   })).isRequired,
   city: PropTypes.string.isRequired,
   cities: PropTypes.arrayOf(PropTypes.string).isRequired,
-  setOffers: PropTypes.func.isRequired,
-  onChangeCity: PropTypes.func.isRequired,
-  setCities: PropTypes.func.isRequired
+  loadOffers: PropTypes.func.isRequired,
+  onChangeCity: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
-  city: state.city,
-  offers: state.offers,
-  cities: state.cities
+  city: getCity(state),
+  offers: getOffers(state),
+  cities: getCities(state)
 });
 const mapDispatchToProps = (dispatch) => ({
-  setOffers: (items) => dispatch(ActionCreator.setOffers(items)),
-  onChangeCity: (city) => dispatch(ActionCreator.changeCity(city)),
-  setCities: (items) => dispatch(ActionCreator.setCities(items)),
+  loadOffers: () => dispatch(Operation.loadOffers()),
+  onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city))
 });
 
 export {App};

@@ -21,9 +21,31 @@ const SortTypeText = {
   [SortType.TOP_RATED]: `Top rated first`
 };
 
+const ActionType = {
+  CHANGE_CITY: `CHANGE_CITY`,
+  SET_OFFERS: `SET_OFFERS`,
+  SET_CITIES: `SET_CITIES`,
+  SET_SERVER_STATUS: `SET_SERVER_STATUS`
+};
+
+const apiSettings = {
+  HOST: `https://htmlacademy-react-2.appspot.com/six-cities`,
+  TIMEOUT: 5000
+};
+
+const StatusCode = {
+  OK: 200,
+  BAD_REQUEST: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404
+};
+
 export {
   MAX_RATING,
   HousingType,
   SortType,
-  SortTypeText
+  SortTypeText,
+  ActionType,
+  apiSettings,
+  StatusCode
 };

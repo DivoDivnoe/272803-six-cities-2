@@ -2,7 +2,7 @@
 
 exports[`MainPage component is rendered correctly 1`] = `
 <div
-  className="page gray main"
+  className="page page--gray page--main"
 >
   <header
     className="header"

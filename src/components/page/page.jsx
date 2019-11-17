@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Header from '../header/header.jsx';
 
 const Page = (props) => {
-  const mods = props.mods;
+  const {mods} = props;
 
   return (
-    <div className={`page ${mods.join(` `)}`}>
+    <div className={`page ${mods.map((mod) => `page--${mod}`).join(` `)}`}>
       <Header />
       {props.children}
     </div>
