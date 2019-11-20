@@ -171,4 +171,3 @@ describe(`loadOffers function`, () => {
       });
   });
 });
-

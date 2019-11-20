@@ -1,6 +1,7 @@
 import axios from 'axios';
-import {apiSettings} from './constants';
-import {ActionCreator} from './reducer/server/server';
+import {apiSettings, StatusCode} from './constants';
+import {ActionCreator as ServerActionCreator} from './reducer/server/server';
+import {ActionCreator as UserActionCreator} from './reducer/user/user';
 
 const createApi = (dispatch) => {
   const api = axios.create(
@@ -14,10 +15,13 @@ const createApi = (dispatch) => {
   const onSuccess = (resolve) => resolve;
   const onFail = (error) => {
     if (error.code === `ECONNABORTED`) {
-      dispatch(ActionCreator.setServerStatus(false));
+      dispatch(ServerActionCreator.setServerStatus(false));
+    } else if (error.response.status === StatusCode.BAD_REQUEST) {
+      dispatch(UserActionCreator.authUser(true));
+      return error;
     }
 
-    return error;
+    throw error;
   };
 
   api.interceptors.response.use(onSuccess, onFail);

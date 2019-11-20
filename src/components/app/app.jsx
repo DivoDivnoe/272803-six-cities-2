@@ -4,10 +4,13 @@ import {connect} from 'react-redux';
 import MainPage from '../main-page/main-page.jsx';
 import OfferPage from '../offer-page/offer-page.jsx';
 
-import {Operation} from '../../reducer/data/data';
+import {Operation as DataOperation} from '../../reducer/data/data';
 import {getCities, getOffers} from '../../reducer/data/selectors';
 import {ActionCreator as AppActionCreator} from '../../reducer/application/application';
 import {getCity} from '../../reducer/application/selectors';
+import {Operation as UserOperation} from '../../reducer/user/user';
+import {getIsAuthRequired, getUserData} from '../../reducer/user/selectors';
+import {getServerRespondingStatus} from '../../reducer/server/selectors';
 
 import withSortType from '../../hocs/with-sort-type/with-sort-type';
 import withActiveItem from '../../hocs/with-active-item/with-active-item';
@@ -20,6 +23,7 @@ const OfferPageWithActiveItem = withActiveItem(OfferPage);
 class App extends PureComponent {
   componentDidMount() {
     this.props.loadOffers();
+    this.props.authUser();
   }
 
   componentDidUpdate(prevProps) {
@@ -116,20 +120,35 @@ App.propTypes = {
     comment: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   })).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    email: PropTypes.strins,
+    name: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    isPro: PropTypes.bool
+  }).isRequired,
   city: PropTypes.string.isRequired,
   cities: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isAuthorizationRequired: PropTypes.bool.isRequired,
+  isServerResponding: PropTypes.bool.isRequired,
   loadOffers: PropTypes.func.isRequired,
-  onChangeCity: PropTypes.func.isRequired
+  onChangeCity: PropTypes.func.isRequired,
+  authUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   city: getCity(state),
   offers: getOffers(state),
-  cities: getCities(state)
+  cities: getCities(state),
+  isAuthorizationRequired: getIsAuthRequired(state),
+  user: getUserData(state),
+  isServerResponding: getServerRespondingStatus(state)
 });
+
 const mapDispatchToProps = (dispatch) => ({
-  loadOffers: () => dispatch(Operation.loadOffers()),
-  onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city))
+  loadOffers: () => dispatch(DataOperation.loadOffers()),
+  onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city)),
+  authUser: () => dispatch(UserOperation.authUser())
 });
 
 export {App};

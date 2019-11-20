@@ -60,13 +60,20 @@ describe(`App component`, () => {
         date: `2019-05-08T14:13:56.569Z`
       }];
 
+    const user = {
+      id: 2
+    };
+
     const leaflet = jest.genMockFromModule(`leaflet`);
     const city = ``;
     const cities = [`Moscow`];
+    const isAuthorizationRequired = false;
+    const isServerResponding = true;
     const setOffers = jest.fn();
     const onChangeCity = jest.fn();
     const setCities = jest.fn();
     const loadOffers = jest.fn();
+    const authUser = jest.fn();
 
     const tree = renderer.create(
         <App
@@ -74,11 +81,15 @@ describe(`App component`, () => {
           leaflet={leaflet}
           reviews={reviews}
           city={city}
+          user={user}
           cities={cities}
           setOffers={setOffers}
+          isServerResponding={isServerResponding}
           onChangeCity={onChangeCity}
           setCities={setCities}
           loadOffers={loadOffers}
+          isAuthorizationRequired={isAuthorizationRequired}
+          authUser={authUser}
         />
     );
 
