@@ -3,6 +3,15 @@ import PropTypes from 'prop-types';
 import Page from '../page/page.jsx';
 import {StatusCode} from '../../constants';
 
+const style = {
+  position: `absolute`,
+  top: `calc(100% + 5px)`,
+  left: `50%`,
+  color: `red`,
+  whiteSpace: `pre`,
+  transform: `translateX(-50%)`
+};
+
 class SignInPage extends PureComponent {
   constructor(props) {
     super(props);
@@ -27,14 +36,6 @@ class SignInPage extends PureComponent {
 
   render() {
     const {email, password, serverStatus, user} = this.props;
-    const style = {
-      position: `absolute`,
-      top: `calc(100% + 5px)`,
-      left: `50%`,
-      color: `red`,
-      whiteSpace: `pre`,
-      transform: `translateX(-50%)`
-    };
 
     return (
       <Page mods={[`gray`, `login`]} user={user}>

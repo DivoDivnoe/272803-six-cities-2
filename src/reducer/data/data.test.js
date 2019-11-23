@@ -21,6 +21,24 @@ describe(`Actions creator returns right action`, () => {
       payload: offers
     });
   });
+
+  it(`for changing reviews`, () => {
+    const reviews = [
+      {
+        id: 1,
+        user: {},
+        rating: 1,
+        comment: `some comment`,
+        date: `2019-05-08`
+      }
+    ];
+    const action = ActionCreator.setReviews(reviews);
+
+    expect(action).toEqual({
+      type: ActionType.SET_REVIEWS,
+      payload: reviews
+    });
+  });
 });
 
 describe(`reducer returns right state`, () => {
@@ -60,6 +78,34 @@ describe(`reducer returns right state`, () => {
     expect(reducer(state, action)).toEqual({
       city: ``,
       offers
+    });
+  });
+
+  it(`with changing reviews action`, () => {
+    const reviews = [
+      {
+        id: 1,
+        user: {},
+        rating: 1,
+        comment: `some comment`,
+        date: `2019-05-08`
+      }
+    ];
+    const state = {
+      offers: [],
+      reviews: []
+    };
+
+
+    const action = {
+      type: ActionType.SET_REVIEWS,
+      payload: reviews
+    };
+
+
+    expect(reducer(state, action)).toEqual({
+      offers: [],
+      reviews
     });
   });
 });
@@ -168,6 +214,111 @@ describe(`loadOffers function`, () => {
           type: ActionType.SET_OFFERS,
           payload: [{fake: true}]
         });
+      });
+  });
+});
+
+describe(`loadReviews function`, () => {
+  it(`makes correct "GET" request to /comments/:id`, () => {
+    const dispatch = jest.fn();
+    const api = createApi(dispatch);
+    const mockApi = new MockAdapter(api);
+    const id = 1;
+    const onFail = jest.fn();
+
+    const reviewsLoader = Operation.loadReviews(id, onFail);
+
+    mockApi
+      .onGet(`/comments/${id}`)
+      .reply(200, [{fake: true}]);
+
+    return reviewsLoader(dispatch, null, api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(dispatch).toHaveBeenCalledWith({
+          type: ActionType.SET_REVIEWS,
+          payload: [{fake: true}]
+        });
+      });
+  });
+
+  it(`handles 400 mistake after /comments/:id  "GET" request correctly`, () => {
+    const dispatch = jest.fn();
+    const api = createApi(dispatch);
+    const mockApi = new MockAdapter(api);
+    const id = 100;
+    const onFail = jest.fn();
+
+    const reviewsLoader = Operation.loadReviews(id, onFail);
+
+    mockApi
+      .onGet(`/comments/${id}`)
+      .reply(400);
+
+    return reviewsLoader(dispatch, null, api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(0);
+        expect(onFail).toHaveBeenCalledTimes(1);
+        expect(onFail).toHaveBeenCalledWith(400);
+      });
+  });
+});
+
+describe(`postReview function`, () => {
+  it(`makes correct "POST" request to /comments/:id`, () => {
+    const dispatch = jest.fn();
+    const api = createApi(dispatch);
+    const mockApi = new MockAdapter(api);
+    const id = 1;
+    const data = {
+      rating: `1`,
+      review: `some review`
+    };
+    const onSuccess = jest.fn();
+    const onFail = jest.fn();
+
+    const reviewsLoader = Operation.postReview(id, data, onSuccess, onFail);
+
+    mockApi
+      .onPost(`/comments/${id}`)
+      .reply(200, [{fake: true}]);
+
+    return reviewsLoader(dispatch, null, api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(1);
+        expect(onSuccess).toHaveBeenCalledTimes(1);
+        expect(onFail).toHaveBeenCalledTimes(0);
+        expect(dispatch).toHaveBeenCalledWith({
+          type: ActionType.SET_REVIEWS,
+          payload: [{fake: true}]
+        });
+      });
+  });
+
+  it(`handles 400 mistake after /comments/:id  "POST" request correctly`, () => {
+    const dispatch = jest.fn();
+    const api = createApi(dispatch);
+    const mockApi = new MockAdapter(api);
+    const id = 100;
+    const data = {
+      rating: `1`,
+      review: `some review`
+    };
+    const onSuccess = jest.fn();
+    const onFail = jest.fn();
+
+    const reviewsLoader = Operation.postReview(id, data, onSuccess, onFail);
+
+    mockApi
+      .onPost(`/comments/${id}`)
+      .reply(400);
+
+    return reviewsLoader(dispatch, null, api)
+      .then(() => {
+        expect(dispatch).toHaveBeenCalledTimes(0);
+        expect(onSuccess).toHaveBeenCalledTimes(0);
+        expect(onFail).toHaveBeenCalledTimes(1);
+        expect(onFail).toHaveBeenCalledWith(400);
       });
   });
 });

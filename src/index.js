@@ -5,7 +5,6 @@ import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
 import {compose} from 'recompose';
 import App from './components/app/app.jsx';
-import {reviews} from './mocks/reviews';
 import leaflet from 'leaflet';
 import reducer from './reducer/index';
 import createApi from './api';
@@ -23,10 +22,7 @@ const store = createStore(
 const init = () => {
   ReactDOM.render(
       <Provider store={store}>
-        <App
-          leaflet={leaflet}
-          reviews={reviews}
-        />
+        <App leaflet={leaflet} />
       </Provider>,
       document.querySelector(`#root`)
   );

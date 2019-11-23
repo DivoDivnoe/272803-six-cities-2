@@ -108,11 +108,16 @@ describe(`setUserData function`, () => {
     const dispatch = jest.fn();
     const api = createApi(dispatch);
     const mockApi = new MockAdapter(api);
+    const data = {
+      email: `some@mail.ru`,
+      password: `1234`
+    };
+    const onFail = jest.fn();
 
-    const userDataSetter = Operation.setUserData();
+    const userDataSetter = Operation.setUserData(data, onFail);
 
     mockApi
-      .onPost(`/login`)
+      .onPost(`/login`, data)
       .reply(200, {fake: true});
 
     return userDataSetter(dispatch, null, api)
@@ -129,20 +134,23 @@ describe(`setUserData function`, () => {
     const dispatch = jest.fn();
     const api = createApi(dispatch);
     const mockApi = new MockAdapter(api);
+    const data = {
+      email: `some@mail.ru`,
+      password: `1234`
+    };
+    const onFail = jest.fn();
 
-    const userAuthorizator = Operation.setUserData();
+    const userAuthorizator = Operation.setUserData(data, onFail);
 
     mockApi
-      .onPost(`/login`)
-      .reply(401);
+      .onPost(`/login`, data)
+      .reply(400);
 
     return userAuthorizator(dispatch, null, api)
       .then(() => {
-        expect(dispatch).toHaveBeenCalledTimes(1);
-        expect(dispatch).toHaveBeenCalledWith({
-          type: ActionType.AUTH_USER,
-          payload: true
-        });
+        expect(dispatch).toHaveBeenCalledTimes(0);
+        expect(onFail).toHaveBeenCalledTimes(1);
+        expect(onFail).toHaveBeenCalledWith(400);
       });
   });
 });
