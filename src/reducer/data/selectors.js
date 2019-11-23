@@ -8,6 +8,7 @@ const getCitiesListFromOffers = (offers) => {
 };
 
 const getOffers = (state) => state[NameSpace.DATA].offers;
+const getReviews = (state) => state[NameSpace.DATA].reviews;
 
 const getCities = createSelector(
     getOffers,
@@ -17,5 +18,6 @@ const getCities = createSelector(
 export {
   getOffers,
   getCities,
+  getReviews,
   getCitiesListFromOffers
 };

@@ -20,10 +20,19 @@ describe(`ReviewsList component`, () => {
         date: `2019-05-08T14:13:56.569Z`
       }];
 
+    const id = 1;
+    const serverStatus = 200;
+    const onChangeServerStatus = jest.fn();
+    const onLoadReviews = jest.fn();
+
     const tree = renderer
       .create(
           <ReviewsList
+            id={id}
             reviews={reviews}
+            serverStatus={serverStatus}
+            onChangeServerStatus={onChangeServerStatus}
+            onLoadReviews={onLoadReviews}
           />
       )
       .toJSON();

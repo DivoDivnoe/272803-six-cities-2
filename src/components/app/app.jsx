@@ -8,7 +8,7 @@ import OfferPage from '../offer-page/offer-page.jsx';
 import SignInPage from '../sign-in-page/sign-in-page.jsx';
 
 import {Operation as DataOperation} from '../../reducer/data/data';
-import {getCities, getOffers} from '../../reducer/data/selectors';
+import {getCities, getOffers, getReviews} from '../../reducer/data/selectors';
 import {ActionCreator as AppActionCreator} from '../../reducer/application/application';
 import {getCity} from '../../reducer/application/selectors';
 import {Operation as UserOperation} from '../../reducer/user/user';
@@ -52,7 +52,9 @@ class App extends PureComponent {
       user,
       isAuthorizationRequired,
       setUserData,
-      onChangeCity
+      loadReviews,
+      onChangeCity,
+      postReview
     } = this.props;
 
     if (pathname === `/`) {
@@ -74,6 +76,10 @@ class App extends PureComponent {
     const [path, id] = pathname.slice(1).split(`/`);
 
     if (path === `offer`) {
+      if (isAuthorizationRequired) {
+        return <SignInPageWithState user={user} onSubmit={setUserData} />;
+      }
+
       return (
         <OfferPageWithActiveItem
           offers={offers}
@@ -81,6 +87,8 @@ class App extends PureComponent {
           reviews={reviews}
           id={+id}
           user={user}
+          onLoadReviews={loadReviews}
+          onPostReview={postReview}
         />
       );
     }
@@ -156,11 +164,14 @@ App.propTypes = {
   loadOffers: PropTypes.func.isRequired,
   onChangeCity: PropTypes.func.isRequired,
   authUser: PropTypes.func.isRequired,
-  setUserData: PropTypes.func.isRequired
+  setUserData: PropTypes.func.isRequired,
+  loadReviews: PropTypes.func.isRequired,
+  postReview: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   city: getCity(state),
+  reviews: getReviews(state),
   offers: getOffers(state),
   cities: getCities(state),
   isAuthorizationRequired: getIsAuthRequired(state),
@@ -170,6 +181,8 @@ const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
 
 const mapDispatchToProps = (dispatch) => ({
   loadOffers: () => dispatch(DataOperation.loadOffers()),
+  loadReviews: (id, onFail) => dispatch(DataOperation.loadReviews(id, onFail)),
+  postReview: (id, data, onSuccess, onFail) => dispatch(DataOperation.postReview(id, data, onSuccess, onFail)),
   onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city)),
   authUser: () => dispatch(UserOperation.authUser()),
   setUserData: (data, callback) => dispatch(UserOperation.setUserData(data, callback))

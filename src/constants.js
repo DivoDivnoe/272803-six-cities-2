@@ -1,4 +1,5 @@
 const MAX_RATING = 5;
+const MIN_REVIEW_LENGTH = 50;
 
 const HousingType = {
   APPARTMENT: `appartment`,
@@ -24,6 +25,7 @@ const SortTypeText = {
 const ActionType = {
   CHANGE_CITY: `CHANGE_CITY`,
   SET_OFFERS: `SET_OFFERS`,
+  SET_REVIEWS: `SET_REVIEWS`,
   SET_CITIES: `SET_CITIES`,
   SET_SERVER_STATUS: `SET_SERVER_STATUS`,
   AUTH_USER: `AUTH_USER`,
@@ -45,6 +47,7 @@ const StatusCode = {
 
 export {
   MAX_RATING,
+  MIN_REVIEW_LENGTH,
   HousingType,
   SortType,
   SortTypeText,

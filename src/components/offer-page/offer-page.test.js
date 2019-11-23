@@ -4,6 +4,7 @@ import OfferPage from './offer-page.jsx';
 
 jest.mock(`../reviews-list/reviews-list.jsx`, () => jest.fn().mockReturnValue(null));
 jest.mock(`../map/map.jsx`, () => jest.fn().mockReturnValue(null));
+jest.mock(`../comment-form/comment-form.jsx`, () => jest.fn().mockReturnValue(null));
 
 describe(`OfferPage component`, () => {
   it(`is rendered correctly`, () => {
@@ -67,6 +68,8 @@ describe(`OfferPage component`, () => {
     const leaflet = jest.genMockFromModule(`leaflet`);
     const onChangeActiveItem = jest.fn();
     const onResetActiveItem = jest.fn();
+    const loadReviews = jest.fn();
+    const postReview = jest.fn();
 
     const tree = renderer.create(
         <OfferPage
@@ -78,6 +81,8 @@ describe(`OfferPage component`, () => {
           user={user}
           onChangeActiveItem={onChangeActiveItem}
           onResetActiveItem={onResetActiveItem}
+          onPostReview={postReview}
+          onLoadReviews={loadReviews}
         />
     );
 
