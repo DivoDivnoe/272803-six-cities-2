@@ -1,25 +1,35 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {compose} from 'recompose';
+
 import MainPage from '../main-page/main-page.jsx';
 import OfferPage from '../offer-page/offer-page.jsx';
+import SignInPage from '../sign-in-page/sign-in-page.jsx';
 
-import {Operation} from '../../reducer/data/data';
+import {Operation as DataOperation} from '../../reducer/data/data';
 import {getCities, getOffers} from '../../reducer/data/selectors';
 import {ActionCreator as AppActionCreator} from '../../reducer/application/application';
 import {getCity} from '../../reducer/application/selectors';
+import {Operation as UserOperation} from '../../reducer/user/user';
+import {getIsAuthRequired, getUserData} from '../../reducer/user/selectors';
+import {getServerRespondingStatus} from '../../reducer/server/selectors';
 
 import withSortType from '../../hocs/with-sort-type/with-sort-type';
 import withActiveItem from '../../hocs/with-active-item/with-active-item';
+import withLogin from '../../hocs/with-login/with-login';
+import withServerStatus from '../../hocs/with-server-status/with-server-status';
 
 import {getRandomNumber} from '../../utils';
 
 const MainPageWithState = withActiveItem(withSortType(MainPage));
 const OfferPageWithActiveItem = withActiveItem(OfferPage);
+const SignInPageWithState = compose(withServerStatus, withLogin)(SignInPage);
 
 class App extends PureComponent {
   componentDidMount() {
     this.props.loadOffers();
+    this.props.authUser();
   }
 
   componentDidUpdate(prevProps) {
@@ -33,15 +43,30 @@ class App extends PureComponent {
 
   _getPageScreen() {
     const {pathname} = location;
-    const {leaflet, reviews, city, cities, offers, onChangeCity} = this.props;
+    const {
+      leaflet,
+      reviews,
+      city,
+      cities,
+      offers,
+      user,
+      isAuthorizationRequired,
+      setUserData,
+      onChangeCity
+    } = this.props;
 
     if (pathname === `/`) {
+      if (isAuthorizationRequired) {
+        return <SignInPageWithState user={user} onSubmit={setUserData} />;
+      }
+
       return (
         <MainPageWithState
           offers={offers}
           leaflet={leaflet}
           city={city}
           cities={cities}
+          user={user}
           onChangeCity={onChangeCity}
         />);
     }
@@ -55,6 +80,7 @@ class App extends PureComponent {
           leaflet={leaflet}
           reviews={reviews}
           id={+id}
+          user={user}
         />
       );
     }
@@ -116,20 +142,37 @@ App.propTypes = {
     comment: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   })).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    email: PropTypes.strins,
+    name: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    isPro: PropTypes.bool
+  }).isRequired,
   city: PropTypes.string.isRequired,
   cities: PropTypes.arrayOf(PropTypes.string).isRequired,
+  isAuthorizationRequired: PropTypes.bool.isRequired,
+  isServerResponding: PropTypes.bool.isRequired,
   loadOffers: PropTypes.func.isRequired,
-  onChangeCity: PropTypes.func.isRequired
+  onChangeCity: PropTypes.func.isRequired,
+  authUser: PropTypes.func.isRequired,
+  setUserData: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => Object.assign({}, ownProps, {
   city: getCity(state),
   offers: getOffers(state),
-  cities: getCities(state)
+  cities: getCities(state),
+  isAuthorizationRequired: getIsAuthRequired(state),
+  user: getUserData(state),
+  isServerResponding: getServerRespondingStatus(state)
 });
+
 const mapDispatchToProps = (dispatch) => ({
-  loadOffers: () => dispatch(Operation.loadOffers()),
-  onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city))
+  loadOffers: () => dispatch(DataOperation.loadOffers()),
+  onChangeCity: (city) => dispatch(AppActionCreator.changeCity(city)),
+  authUser: () => dispatch(UserOperation.authUser()),
+  setUserData: (data, callback) => dispatch(UserOperation.setUserData(data, callback))
 });
 
 export {App};

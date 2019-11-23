@@ -25,7 +25,9 @@ const ActionType = {
   CHANGE_CITY: `CHANGE_CITY`,
   SET_OFFERS: `SET_OFFERS`,
   SET_CITIES: `SET_CITIES`,
-  SET_SERVER_STATUS: `SET_SERVER_STATUS`
+  SET_SERVER_STATUS: `SET_SERVER_STATUS`,
+  AUTH_USER: `AUTH_USER`,
+  SET_USER_DATA: `SET_USER_DATA`
 };
 
 const apiSettings = {
@@ -35,7 +37,8 @@ const apiSettings = {
 
 const StatusCode = {
   OK: 200,
-  BAD_REQUEST: 401,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404
 };

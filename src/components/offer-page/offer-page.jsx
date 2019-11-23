@@ -17,6 +17,7 @@ class OfferPage extends PureComponent {
       id,
       leaflet,
       activeItem,
+      user,
       onChangeActiveItem,
       onResetActiveItem
     } = this.props;
@@ -37,7 +38,7 @@ class OfferPage extends PureComponent {
     const classNames = [`near-places__list`, `places__list`];
 
     return (
-      <Page>
+      <Page user={user}>
         <main className="page__main page__main--property">
           <section className="property">
             <div className="property__gallery-container container">
@@ -303,6 +304,13 @@ OfferPage.propTypes = {
     comment: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
   })).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    email: PropTypes.strins,
+    name: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    isPro: PropTypes.bool
+  }).isRequired,
   onChangeActiveItem: PropTypes.func.isRequired,
   onResetActiveItem: PropTypes.func.isRequired
 };
