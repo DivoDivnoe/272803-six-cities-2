@@ -16,7 +16,7 @@ const createApi = (dispatch) => {
   const onFail = (error) => {
     if (error.code === `ECONNABORTED`) {
       dispatch(ServerActionCreator.setServerStatus(false));
-    } else if (error.response.status === StatusCode.BAD_REQUEST) {
+    } else if (error.response.status === StatusCode.UNAUTHORIZED) {
       dispatch(UserActionCreator.authUser(true));
       return error;
     }

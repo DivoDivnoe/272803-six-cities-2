@@ -1,4 +1,5 @@
 import {ActionType, StatusCode} from '../../constants';
+import {transformObjSnakeToCamel} from '../../utils';
 
 const initialState = {
   isAuthorizationRequired: false,
@@ -12,7 +13,21 @@ const Operation = {
     return api.get(`/login`)
       .then((response) => {
         if (response.status === StatusCode.OK) {
-          dispatch(ActionCreator.setUserData(response.data));
+          dispatch(ActionCreator.setUserData(transformObjSnakeToCamel(response.data)));
+        }
+      });
+  },
+  setUserData: (data, onFail) => (dispatch, _, api) => {
+    return api.post(`/login`, data)
+      .then((response) => {
+        if (response.status === StatusCode.OK) {
+          dispatch(ActionCreator.authUser(false));
+          dispatch(ActionCreator.setUserData(transformObjSnakeToCamel(response.data)));
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === StatusCode.BAD_REQUEST) {
+          onFail(error.response.status);
         }
       });
   }

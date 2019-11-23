@@ -57,6 +57,13 @@ describe(`OfferPage component`, () => {
         comment: `some comment`,
         date: `2019-05-08T14:13:56.569Z`
       }];
+    const user = {
+      id: 1,
+      email: ``,
+      name: ``,
+      avatarUrl: ``,
+      isPro: true
+    };
     const leaflet = jest.genMockFromModule(`leaflet`);
     const onChangeActiveItem = jest.fn();
     const onResetActiveItem = jest.fn();
@@ -68,6 +75,7 @@ describe(`OfferPage component`, () => {
           activeItem={offers[0]}
           reviews={reviews}
           leaflet={leaflet}
+          user={user}
           onChangeActiveItem={onChangeActiveItem}
           onResetActiveItem={onResetActiveItem}
         />

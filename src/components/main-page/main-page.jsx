@@ -13,6 +13,7 @@ const MainPage = (props) => {
     cities,
     sortType,
     activeItem,
+    user,
     renderSorting,
     onChangeCity,
     onChangeActiveItem,
@@ -26,7 +27,7 @@ const MainPage = (props) => {
   const filteredOffers = offers.filter((offer) => offer.city.name === city);
 
   return (
-    <Page mods={[`gray`, `main`]}>
+    <Page mods={[`gray`, `main`]} user={user}>
       <main className={
         `page__main page__main--index ${!filteredOffers.length ? `page__main--index-empty` : `` }`
       }>
@@ -121,6 +122,13 @@ MainPage.propTypes = {
           zoom: PropTypes.number.isRequired
         }).isRequired
       })).isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    email: PropTypes.strins,
+    name: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    isPro: PropTypes.bool
+  }).isRequired,
   onChangeCity: PropTypes.func.isRequired,
   renderSorting: PropTypes.func.isRequired,
   onChangeActiveItem: PropTypes.func.isRequired,

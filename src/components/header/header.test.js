@@ -9,8 +9,16 @@ jest.mock(`../sorting/sorting.jsx`, () => jest.fn().mockReturnValue(null));
 
 describe(`MainPage component`, () => {
   it(`is rendered correctly`, () => {
+    const user = {
+      id: 1,
+      email: ``,
+      name: ``,
+      avatarUrl: ``,
+      isPro: true
+    };
+
     const tree = renderer
-      .create(<Header />)
+      .create(<Header user={user} />)
       .toJSON();
 
     expect(tree).toMatchSnapshot();

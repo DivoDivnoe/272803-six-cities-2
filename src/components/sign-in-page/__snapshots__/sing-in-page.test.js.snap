@@ -23,7 +23,7 @@ exports[`SignInPage component is rendered correctly 1`] = `
               alt="6 cities logo"
               className="header__logo"
               height="41"
-              src="/img/logo.svg"
+              src="img/logo.svg"
               width="81"
             />
           </a>
@@ -45,9 +45,9 @@ exports[`SignInPage component is rendered correctly 1`] = `
                   className="header__avatar-wrapper user__avatar-wrapper"
                 />
                 <span
-                  className="header__user-name user__name"
+                  className="header__login"
                 >
-                  Oliver.conner@gmail.com
+                  Sign in
                 </span>
               </a>
             </li>
@@ -114,6 +114,7 @@ exports[`SignInPage component is rendered correctly 1`] = `
           </div>
           <button
             className="login__submit form__submit button"
+            disabled={false}
             type="submit"
           >
             Sign in

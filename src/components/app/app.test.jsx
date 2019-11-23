@@ -74,6 +74,7 @@ describe(`App component`, () => {
     const setCities = jest.fn();
     const loadOffers = jest.fn();
     const authUser = jest.fn();
+    const setUserData = jest.fn();
 
     const tree = renderer.create(
         <App
@@ -90,6 +91,7 @@ describe(`App component`, () => {
           loadOffers={loadOffers}
           isAuthorizationRequired={isAuthorizationRequired}
           authUser={authUser}
+          setUserData={setUserData}
         />
     );
 

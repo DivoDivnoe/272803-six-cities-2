@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import Page from '../page/page.jsx';
+import {StatusCode} from '../../constants';
 
 class SignInPage extends PureComponent {
   constructor(props) {
@@ -17,18 +18,26 @@ class SignInPage extends PureComponent {
   }
 
   _handleSubmit(evt) {
-    const {email, password, onSubmit} = this.props;
+    const {email, password, onSubmit, onChangeServerStatus} = this.props;
 
     evt.preventDefault();
 
-    onSubmit(email, password);
+    onSubmit({email, password}, onChangeServerStatus);
   }
 
   render() {
-    const {email, password} = this.props;
+    const {email, password, serverStatus, user} = this.props;
+    const style = {
+      position: `absolute`,
+      top: `calc(100% + 5px)`,
+      left: `50%`,
+      color: `red`,
+      whiteSpace: `pre`,
+      transform: `translateX(-50%)`
+    };
 
     return (
-      <Page mods={[`gray`, `login`]}>
+      <Page mods={[`gray`, `login`]} user={user}>
         <main className="page__main page__main--login">
           <div className="page__login-container container">
             <section className="login">
@@ -58,7 +67,12 @@ class SignInPage extends PureComponent {
                     onChange={this._handleChange}
                   />
                 </div>
-                <button className="login__submit form__submit button" type="submit">Sign in</button>
+                <button
+                  className="login__submit form__submit button"
+                  type="submit"
+                  disabled={!(email.length && password.length)}
+                >Sign in</button>
+                {serverStatus === StatusCode.BAD_REQUEST && <div style={style}>Введите корректные данные</div>}
               </form>
             </section>
             <section className="locations locations--login locations--current">
@@ -79,7 +93,16 @@ SignInPage.propTypes = {
   email: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  serverStatus: PropTypes.number.isRequired,
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    email: PropTypes.strins,
+    name: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    isPro: PropTypes.bool
+  }).isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onChangeServerStatus: PropTypes.func.isRequired
 };
 
 export default SignInPage;

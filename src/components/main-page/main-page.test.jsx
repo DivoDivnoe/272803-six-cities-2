@@ -45,6 +45,14 @@ describe(`MainPage component`, () => {
       }
     ];
 
+    const user = {
+      id: 1,
+      email: ``,
+      name: ``,
+      avatarUrl: ``,
+      isPro: true
+    };
+
     const leaflet = jest.genMockFromModule(`leaflet`);
     const city = `somecity`;
     const cities = [`somecity`];
@@ -63,6 +71,7 @@ describe(`MainPage component`, () => {
             leaflet={leaflet}
             cities={cities}
             city={city}
+            user={user}
             onChangeCity={onChangeCity}
             renderSorting={renderSorting}
             onChangeActiveItem={onChangeActiveItem}
